@@ -1,0 +1,65 @@
+//
+// Created by Jakub Gert on 01/06/2020.
+//
+
+#include <QRegExp>
+#include <QRegularExpression>
+#include <QDebug>
+#include "GRBL.h"
+
+MachineState::MachineState(State state, Code code) : state(state), code(code) {}
+
+MachineState::MachineState() : state(State::Idle), code(-1) {}
+
+void GRBL::parse(const QByteArray &data) {
+
+    QString message(data);
+    QRegExp regexStatus("<{1}(.*)>{1}");
+    if (regexStatus.exactMatch(message)) {
+        auto statusMessage = regexStatus.cap(1);
+        parseStatus(statusMessage);
+    }
+}
+
+bool GRBL::parseStatus(const QString &message) {
+
+    QStringList list = message.split("|");
+
+    QStringListIterator iterator(list);
+
+    bool result = true;
+
+    while (iterator.hasNext() && result) {
+        const string status = QString(iterator.next()).toStdString();
+        if (accessoryStateParser.parse(status)) {
+            AccessoryState current = accessoryStateParser.getAccessoryState();
+            if (!(current == accessoryState)) {
+                accessoryState = current;
+                emit onReceivedAccessoryState(current);
+            }
+        } else if (bufferStateParser.parse(status)) {
+            emit onReceivedBufferState(bufferStateParser.getBufferState());
+        } else if (feedRateParser.parse(status)) {
+            emit onReceivedFeedRate(feedRateParser.getFeedRate());
+            emit onReceivedSpindleSpeed(0);
+        } else if (feedRateAndSpindleSpeedParser.parse(status)) {
+            emit onReceivedFeedRate(feedRateAndSpindleSpeedParser.getFeedRate());
+            emit onReceivedSpindleSpeed(feedRateAndSpindleSpeedParser.getSpindleSpeed());
+        } else if (inputPinStateParser.parse(status)) {
+            emit onReceivedInputPinState(inputPinStateParser.getInputPinState());
+        } else if (lineNumberParser.parse(status)) {
+            emit onReceivedLineNUmber(lineNumberParser.getLineNumber());
+        } else if (machineStateParser.parse(status)) {
+            emit onReceivedMachineState(machineStateParser.getMachineState());
+        } else if (overriddenValuesParser.parse(status)) {
+            emit onReceivedOverriddenValues(overriddenValuesParser.getOverriddenValues());
+        } else if (positionParser.parse(status)) {
+            emit onReceivedMPos(positionParser.getMachinePosition());
+            emit onReceivedWPos(positionParser.getWorkPosition());
+        } else {
+            result = false;
+        }
+    }
+
+    return result;
+}
