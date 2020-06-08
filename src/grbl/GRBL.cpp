@@ -48,7 +48,7 @@ bool GRBL::parseStatus(const QString &message) {
         } else if (inputPinStateParser.parse(status)) {
             emit onReceivedInputPinState(inputPinStateParser.getInputPinState());
         } else if (lineNumberParser.parse(status)) {
-            emit onReceivedLineNUmber(lineNumberParser.getLineNumber());
+            emit onReceivedLineNumber(lineNumberParser.getLineNumber());
         } else if (machineStateParser.parse(status)) {
             emit onReceivedMachineState(machineStateParser.getMachineState());
         } else if (overriddenValuesParser.parse(status)) {
@@ -56,6 +56,7 @@ bool GRBL::parseStatus(const QString &message) {
         } else if (positionParser.parse(status)) {
             emit onReceivedMPos(positionParser.getMachinePosition());
             emit onReceivedWPos(positionParser.getWorkPosition());
+            emit onReceivedWorkCoordinateOffset(positionParser.getWorkCoordinateOffset());
         } else {
             result = false;
         }

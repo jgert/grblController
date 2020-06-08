@@ -56,7 +56,7 @@ signals:
 
     void onReceivedInputPinState(InputPinState inputPinState);
 
-    void onReceivedLineNUmber(unsigned int lineNumber);
+    void onReceivedLineNumber(unsigned int lineNumber);
 
     void onReceivedMachineState(MachineState state);
 
@@ -65,6 +65,8 @@ signals:
     void onReceivedMPos(const vec3 &position);
 
     void onReceivedWPos(const vec3 &position);
+
+    void onReceivedWorkCoordinateOffset(const vec3 &position);
 
 };
 
