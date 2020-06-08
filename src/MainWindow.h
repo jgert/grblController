@@ -9,6 +9,7 @@
 #include <QPlainTextEdit>
 #include <src/widgets/console/ConsoleWidget.h>
 #include <src/grbl/GRBL.h>
+#include <src/widgets/welcome/WelcomeWidget.h>
 #include "SerialPort.h"
 #include "src/widgets/serialPort/SerialPortWidget.h"
 #include "status/StatusWidget.h"
@@ -24,6 +25,7 @@ private:
     SerialPortWidget *serialPortWidget;
     ConsoleWidget *consoleWidget;
     StatusWidget *statusWidget;
+    WelcomeWidget *welcomeWidget;
 
     void createMainMenu();
 
