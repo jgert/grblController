@@ -11,6 +11,8 @@ Q_DECLARE_METATYPE(State)
 
 Q_DECLARE_METATYPE(MachineState)
 
+Q_DECLARE_METATYPE(vec3)
+
 class GRBLTests : public TestSuite {
 Q_OBJECT
 
@@ -19,6 +21,7 @@ private slots:
     void initTestCase() {
         qRegisterMetaType<State>();
         qRegisterMetaType<MachineState>();
+        qRegisterMetaType<vec3>();
     }
 
     void testIntegrationMachineStateValid() {
@@ -55,11 +58,11 @@ private slots:
         QCOMPARE(spyMPos.count(), 2);
         QCOMPARE(spyWPos.count(), 2);
 
-        QCOMPARE(qvariant_cast<QVector3D>(spyMPos[0].takeFirst()), QVector3D(10, 20, 30));
-        QCOMPARE(qvariant_cast<QVector3D>(spyWPos[0].takeFirst()), QVector3D(10, 20, 30));
+        QCOMPARE(qvariant_cast<vec3>(spyMPos[0].takeFirst()), vec3(10, 20, 30));
+        QCOMPARE(qvariant_cast<vec3>(spyWPos[0].takeFirst()), vec3(10, 20, 30));
 
-        QCOMPARE(qvariant_cast<QVector3D>(spyMPos[1].takeFirst()), QVector3D(10, 20, 30));
-        QCOMPARE(qvariant_cast<QVector3D>(spyWPos[1].takeFirst()), QVector3D(-40, -40, -40));
+        QCOMPARE(qvariant_cast<vec3>(spyMPos[1].takeFirst()), vec3(10, 20, 30));
+        QCOMPARE(qvariant_cast<vec3>(spyWPos[1].takeFirst()), vec3(-40, -40, -40));
     }
 
     void testIntegrationMachineStatePositionMPos() {
@@ -73,11 +76,11 @@ private slots:
         QCOMPARE(spyMPos.count(), 2);
         QCOMPARE(spyWPos.count(), 2);
 
-        QCOMPARE(qvariant_cast<QVector3D>(spyMPos[0].takeFirst()), QVector3D(10, 20, 30));
-        QCOMPARE(qvariant_cast<QVector3D>(spyWPos[0].takeFirst()), QVector3D(10, 20, 30));
+        QCOMPARE(qvariant_cast<vec3>(spyMPos[0].takeFirst()), vec3(10, 20, 30));
+        QCOMPARE(qvariant_cast<vec3>(spyWPos[0].takeFirst()), vec3(10, 20, 30));
 
-        QCOMPARE(qvariant_cast<QVector3D>(spyMPos[1].takeFirst()), QVector3D(60, 80, 100));
-        QCOMPARE(qvariant_cast<QVector3D>(spyWPos[1].takeFirst()), QVector3D(10, 20, 30));
+        QCOMPARE(qvariant_cast<vec3>(spyMPos[1].takeFirst()), vec3(60, 80, 100));
+        QCOMPARE(qvariant_cast<vec3>(spyWPos[1].takeFirst()), vec3(10, 20, 30));
     }
 
 };
