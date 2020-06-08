@@ -31,7 +31,7 @@ set(
         src/widgets/status/StatusWidget.h
         src/widgets/vec3/Vec3Widget.cpp
         src/widgets/vec3/Vec3Widget.h
-)
+        src/widgets/welcome/WelcomeWidget.cpp src/widgets/welcome/WelcomeWidget.h)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
@@ -62,6 +62,8 @@ set(
 set(
         SOURCES_GRBL
         ${SOURCES_PARSER_STATUS_REPORT}
+        src/grbl/parsers/welcome_message/WelcomeMessageParser.cpp
+        src/grbl/parsers/welcome_message/WelcomeMessageParser.h
 )
 
 set(
@@ -89,15 +91,16 @@ add_executable(
         tests/TestSuite.h
         ${SOURCES_GRBL}
         src/grbl/GRBL.test.cpp
+        src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.test.cpp
         src/grbl/parsers/status_report/buffer_state/BufferStateParser.test.cpp
         src/grbl/parsers/status_report/feed_rate/FeedRateParser.test.cpp
         src/grbl/parsers/status_report/feed_rate_spindle_speed/FeedRateAndSpindleSpeedParser.test.cpp
         src/grbl/parsers/status_report/input_pin_state/InputPinStateParser.test.cpp
         src/grbl/parsers/status_report/line_number/LineNumberParser.test.cpp
         src/grbl/parsers/status_report/machine_state/MachineStateParser.test.cpp
-        src/grbl/parsers/status_report/position_parser/PositionParser.test.cpp
         src/grbl/parsers/status_report/overridden_values/OverridenValuesParser.test.cpp
-        src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.test.cpp)
+        src/grbl/parsers/status_report/position_parser/PositionParser.test.cpp
+        src/grbl/parsers/welcome_message/WelcomeMessageParser.test.cpp)
 
 target_link_libraries(
         grbl-test
