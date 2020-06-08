@@ -18,6 +18,7 @@
 #include "src/grbl/parsers/status_report/machine_state/MachineStateParser.h"
 #include "src/grbl/parsers/status_report/overridden_values/OverriddenValuesParser.h"
 #include "src/grbl/parsers/status_report/position_parser/PositionParser.h"
+#include "src/grbl/parsers/welcome_message/WelcomeMessageParser.h"
 
 class GRBL : public QObject {
 Q_OBJECT
@@ -32,6 +33,7 @@ private:
     MachineStateParser machineStateParser;
     OverriddenValuesParser overriddenValuesParser;
     PositionParser positionParser;
+    WelcomeMessageParser welcomeMessageParser;
 
     AccessoryState accessoryState;
 public:
@@ -39,6 +41,7 @@ public:
 private:
     
     bool parseStatus(const QString &message);
+    bool parseWelcomeMessage(const QString &message);
 
 public:
 
@@ -67,6 +70,8 @@ signals:
     void onReceivedWPos(const vec3 &position);
 
     void onReceivedWorkCoordinateOffset(const vec3 &position);
+
+    void onReceivedWelcomeMessage(const QString &message);
 
 };
 

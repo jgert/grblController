@@ -13,12 +13,29 @@ MachineState::MachineState() : state(State::Idle), code(-1) {}
 
 void GRBL::parse(const QByteArray &data) {
 
+    bool result = true;
+
     QString message(data);
     QRegExp regexStatus("<{1}(.*)>{1}");
+
     if (regexStatus.exactMatch(message)) {
         auto statusMessage = regexStatus.cap(1);
-        parseStatus(statusMessage);
+        result &= parseStatus(statusMessage);
     }
+
+    result &= parseWelcomeMessage(message);
+}
+
+bool GRBL::parseWelcomeMessage(const QString &message) {
+
+    if (!welcomeMessageParser.parse(message.toStdString())) {
+        return false;
+    }
+
+    auto version = QString(welcomeMessageParser.getVersion().c_str());
+    emit onReceivedWelcomeMessage(version);
+
+    return true;
 }
 
 bool GRBL::parseStatus(const QString &message) {
