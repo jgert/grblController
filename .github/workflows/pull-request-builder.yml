@@ -7,13 +7,10 @@ on:
     branches: [ develop ]
 
 jobs:
-  test:
-    name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-        
+  test-linux:
+    name: Test on linux-latest
+    runs-on: ubuntu-latest
+
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -30,3 +27,10 @@ jobs:
       with:
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
         modules: 'qtserialport'
+
+    - name: Build-Debug
+      run: |
+        cmake -DCMAKE_BUILD_TYPE=Debug
+        make
+        ./grbl-test
+        bash <(curl -s https://codecov.io/bash)
