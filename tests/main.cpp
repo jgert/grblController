@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     int status = 0;
     auto suite = TestSuite::getSuite();
     for (auto & it : suite) {
-        status |= QTest::qExec(it, argc, argv);
+        status += QTest::qExec(it, argc, argv);
     }
 
     return status;
