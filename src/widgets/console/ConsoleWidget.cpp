@@ -2,7 +2,7 @@
 // Created by Jakub Gert on 07/06/2020.
 //
 
-#import <QObject>
+#include <QObject>
 #include <QToolBar>
 #include <QAction>
 #include <QDebug>

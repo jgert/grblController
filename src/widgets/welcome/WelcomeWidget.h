@@ -5,7 +5,7 @@
 #ifndef GRBL_WELCOMEWIDGET_H
 #define GRBL_WELCOMEWIDGET_H
 
-#import <QWidget>
+#include <QWidget>
 #include "ui_WelcomeWidget.h"
 
 namespace Ui {

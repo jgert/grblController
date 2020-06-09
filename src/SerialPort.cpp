@@ -8,8 +8,8 @@
 #include "SerialPort.h"
 
 SerialPort::SerialPort() :
-        paused(false),
-        serialPort(nullptr){
+        serialPort(nullptr),
+        paused(false) {
 
 }
 
