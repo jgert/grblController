@@ -17,7 +17,8 @@ MainWindow::MainWindow(SerialPort *serialPort) :
         widgetTools(new QSet<QDockWidget *>),
         serialPortWidget(new SerialPortWidget()),
         consoleWidget(new ConsoleWidget()),
-        statusWidget(new StatusWidget()) {
+        statusWidget(new StatusWidget()),
+        welcomeWidget(new WelcomeWidget()) {
 
     createMainMenu();
 
@@ -32,7 +33,7 @@ MainWindow::MainWindow(SerialPort *serialPort) :
     dockWidget = new QDockWidget();
     dockWidget->setWindowTitle("Console");
     dockWidget->setWidget(consoleWidget);
-    addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, dockWidget);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWidget);
     registerDockTool(dockWidget);
     connect(
             consoleWidget, &ConsoleWidget::onSendMessage,
@@ -41,8 +42,18 @@ MainWindow::MainWindow(SerialPort *serialPort) :
     dockWidget = new QDockWidget();
     dockWidget->setWindowTitle("Status");
     dockWidget->setWidget(statusWidget);
-    addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, dockWidget);
+    addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dockWidget);
     registerDockTool(dockWidget);
+
+    dockWidget = new QDockWidget();
+    dockWidget->setWindowTitle("Welcome");
+    dockWidget->setWidget(welcomeWidget);
+    addDockWidget(
+            Qt::DockWidgetArea::RightDockWidgetArea,
+            dockWidget);
+    registerDockTool(dockWidget);
+    connect(grbl, &GRBL::onReceivedWelcomeMessage,
+            welcomeWidget, &WelcomeWidget::setVersion);
 
     connect(grbl, &GRBL::onReceivedAccessoryState,
             statusWidget, &StatusWidget::setAccessoryState);
