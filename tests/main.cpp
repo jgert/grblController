@@ -2,15 +2,8 @@
 // Created by Jakub Gert on 07/06/2020.
 //
 
-#include <QApplication>
-#include <QDebug>
-#include <QStyle>
 #include <QTest>
-#include <QtTest/QtTest>
-#include "src/MainWindow.h"
-#include "src/grbl/GRBL.h"
 #include "tests/TestSuite.h"
-#include <regex>
 
 using namespace std;
 
