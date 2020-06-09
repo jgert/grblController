@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.15)
 project(grbl)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -83,6 +83,12 @@ add_executable(grbl
 target_link_libraries(grbl
         Qt5::Widgets
         Qt5::SerialPort)
+
+include(cmake-modules/CodeCoverage.cmake)
+
+append_coverage_compiler_flags()
+
+set(COVERAGE_EXCLUDES **/*.test.*)
 
 add_executable(
         grbl-test
