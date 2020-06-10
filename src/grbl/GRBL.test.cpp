@@ -214,6 +214,26 @@ private slots:
         QCOMPARE(qvariant_cast<vec3>(spyWPos[1].takeFirst()), vec3(10, 20, 30));
     }
 
+    void testIntegrationHelpParser() {
+        GRBL controller;
+
+        QSignalSpy spy(&controller, &GRBL::onReceivedHelp);
+
+        controller.parse("[HLP:$$ $# $G $I $N $x=val $Nx=line $J=line $SLP $C $X $H ~ ! ? ctrl-x]");
+
+        QStringList expected(
+                {
+                        "$$", "$#", "$G", "$I", "$N",
+                        "$x=val", "$Nx=line", "$J=line",
+                        "$SLP", "$C", "$X",
+                        "$H", "~", "!", "?", "ctrl-x"
+                }
+        );
+
+        QCOMPARE(spy.count(), 1);
+        QCOMPARE(qvariant_cast<QStringList>(spy[0].takeFirst()), expected);
+    }
+
 };
 
 

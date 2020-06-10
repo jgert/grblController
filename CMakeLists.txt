@@ -39,6 +39,8 @@ set(
         src/grbl/GRBL.h
         src/grbl/parsers/alarm/AlarmParser.cpp
         src/grbl/parsers/alarm/AlarmParser.h
+        src/grbl/parsers/help/HelpParser.cpp
+        src/grbl/parsers/help/HelpParser.h
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.cpp
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.h
         src/grbl/parsers/status_report/buffer_state/BufferStateParser.cpp
