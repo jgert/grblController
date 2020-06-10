@@ -37,6 +37,8 @@ public slots:
 
     void slot_receivedData(const QByteArray &data);
 
+    void addMessage(const QString &message);
+
 signals:
     void onSendMessage(const QByteArray &data);
 };

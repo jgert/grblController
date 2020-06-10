@@ -112,10 +112,15 @@ void ConsoleWidget::clearConsole() {
 
 void ConsoleWidget::slot_receivedData(const QByteArray &data) {
 
+    addMessage(QString(data));
+}
+
+void ConsoleWidget::addMessage(const QString &message) {
+
     if (actionPaused->isChecked())
         return;
 
-    ui->plainTextEdit->appendPlainText(QString(data));
+    ui->plainTextEdit->appendPlainText(message);
 }
 
 void ConsoleWidget::saveConsoleLog() {
