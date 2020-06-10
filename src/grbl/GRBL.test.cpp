@@ -234,6 +234,17 @@ private slots:
         QCOMPARE(qvariant_cast<QStringList>(spy[0].takeFirst()), expected);
     }
 
+    void testIntegrationWelcomeMessage() {
+        GRBL controller;
+
+        QSignalSpy spy(&controller, &GRBL::onReceivedWelcomeMessage);
+
+        controller.parse("Grbl 1.1h ['$' for help]");
+
+        QCOMPARE(spy.count(), 1);
+        auto state = qvariant_cast<QString>(spy.takeFirst()[0]);
+        QCOMPARE(state, "1.1h");
+    }
 };
 
 
