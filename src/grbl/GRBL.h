@@ -9,6 +9,7 @@
 #include <QString>
 #include <QVector3D>
 
+#include "src/grbl/parsers/alarm/AlarmParser.h"
 #include "src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.h"
 #include "src/grbl/parsers/status_report/buffer_state/BufferStateParser.h"
 #include "src/grbl/parsers/status_report/feed_rate/FeedRateParser.h"
@@ -22,8 +23,8 @@
 
 class GRBL : public QObject {
 Q_OBJECT
-
 private:
+    AlarmParser alarmParser;
     AccessoryStateParser accessoryStateParser;
     BufferStateParser bufferStateParser;
     FeedRateParser feedRateParser;
@@ -49,6 +50,8 @@ public:
 
 signals:
 
+    void onReceivedAlarm(unsigned int code);
+
     void onReceivedAccessoryState(AccessoryState state);
 
     void onReceivedBufferState(BufferState state);
@@ -72,6 +75,8 @@ signals:
     void onReceivedWorkCoordinateOffset(const vec3 &position);
 
     void onReceivedWelcomeMessage(const QString &message);
+
+    void onParserError(const QString &message);
 
 };
 
