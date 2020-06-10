@@ -10,6 +10,7 @@
 #include <QVector3D>
 
 #include "src/grbl/parsers/alarm/AlarmParser.h"
+#include "src/grbl/parsers/help/HelpParser.h"
 #include "src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.h"
 #include "src/grbl/parsers/status_report/buffer_state/BufferStateParser.h"
 #include "src/grbl/parsers/status_report/feed_rate/FeedRateParser.h"
@@ -25,6 +26,7 @@ class GRBL : public QObject {
 Q_OBJECT
 private:
     AlarmParser alarmParser;
+    HelpParser helpParser;
     AccessoryStateParser accessoryStateParser;
     BufferStateParser bufferStateParser;
     FeedRateParser feedRateParser;
@@ -76,7 +78,10 @@ signals:
 
     void onReceivedWelcomeMessage(const QString &message);
 
+    void onReceivedHelp(const QStringList &helpOptions);
+
     void onParserError(const QString &message);
+
 
 };
 

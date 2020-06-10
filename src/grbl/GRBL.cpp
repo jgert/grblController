@@ -13,21 +13,32 @@ MachineState::MachineState() : state(State::Idle), code(-1) {}
 
 void GRBL::parse(const QByteArray &data) {
 
-    QString message(data);
+    QString str(data);
 
     if(data.isEmpty()) {
         return;
     }
 
-    if (parseStatus(message)) {
+    string message = str.toStdString();
+
+    if (parseStatus(str)) {
         return;
-    } else if (alarmParser.parse(message.toStdString())) {
+    } else if (alarmParser.parse(message)) {
         emit onReceivedAlarm(alarmParser.getAlarmValue());
         return;
-    } else if (parseWelcomeMessage(message)) {
+    } else if (parseWelcomeMessage(str)) {
+        return;
+    } else if (helpParser.parse(message)) {
+        const vector<string> &items = helpParser.getHelpOptions();
+        QStringList list;
+        list.reserve(items.size());
+        for(const string& s : items) {
+            list.append(QString::fromStdString(s));
+        }
+        emit onReceivedHelp(list);
         return;
     } else {
-        emit onParserError("Unsupported message: >>" + message + "<<");
+        emit onParserError("Unsupported message: >>" + str + "<<");
     }
 }
 
