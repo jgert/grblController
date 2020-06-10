@@ -36,6 +36,24 @@ private slots:
         qRegisterMetaType<vec3>();
     }
 
+    void testIntegrationAlarm() {
+        GRBL controller;
+
+        QSignalSpy spy(&controller, &GRBL::onReceivedAlarm);
+
+        controller.parse("ALARM:0");
+
+        QCOMPARE(spy.count(), 1);
+        auto state = qvariant_cast<unsigned int>(spy.takeFirst()[0]);
+        QCOMPARE(state, 0);
+
+        controller.parse("ALARM:2");
+
+        QCOMPARE(spy.count(), 1);
+        state = qvariant_cast<unsigned int>(spy.takeFirst()[0]);
+        QCOMPARE(state, 2);
+    }
+
     void testIntegrationAccessoryState() {
         GRBL controller;
 
@@ -198,25 +216,6 @@ private slots:
 
 };
 
-//void GRBLTests::testParser() {
-//    GRBL controller;
-//
-//    QSignalSpy spy(&controller, &GRBL::onReceiveMPos);
-//
-//    auto test = QString("<Idle|MPos:35.000,-105.000,95.000|FS:0,0|WCO:30.000,-100.000,-10.000>");
-//    // 5. -5, 105
-//    // 35, 105, 95
-//    // <Idle|MPos:35.000,-105.000,95.000|FS:0,0|Ov:173,100,100>
-//
-////        auto test = QString("<MPos:10.23,-0.000,0.000>");
-//    controller.parse(test);
-//
-//    QCOMPARE(spy.count(), 1);
-//    QList<QVariant> result = spy.takeFirst();
-//    QCOMPARE(result.at(0).toString(), "10.23");
-//    QCOMPARE(result.at(1).toString(), "-0.000");
-//    QCOMPARE(result.at(2).toString(), "0.000");
-//}
 
 static GRBLTests T_GRBLTests;
 

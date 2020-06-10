@@ -37,6 +37,8 @@ set(
         SOURCES_PARSER_STATUS_REPORT
         src/grbl/GRBL.cpp
         src/grbl/GRBL.h
+        src/grbl/parsers/alarm/AlarmParser.cpp
+        src/grbl/parsers/alarm/AlarmParser.h
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.cpp
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.h
         src/grbl/parsers/status_report/buffer_state/BufferStateParser.cpp
@@ -64,7 +66,7 @@ set(
         ${SOURCES_PARSER_STATUS_REPORT}
         src/grbl/parsers/welcome_message/WelcomeMessageParser.cpp
         src/grbl/parsers/welcome_message/WelcomeMessageParser.h
-)
+        )
 
 set(
         SOURCES
@@ -97,6 +99,7 @@ add_executable(
         tests/TestSuite.h
         ${SOURCES_GRBL}
         src/grbl/GRBL.test.cpp
+        src/grbl/parsers/alarm/AlarmParser.test.cpp
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.test.cpp
         src/grbl/parsers/status_report/buffer_state/BufferStateParser.test.cpp
         src/grbl/parsers/status_report/feed_rate/FeedRateParser.test.cpp
@@ -106,7 +109,8 @@ add_executable(
         src/grbl/parsers/status_report/machine_state/MachineStateParser.test.cpp
         src/grbl/parsers/status_report/overridden_values/OverridenValuesParser.test.cpp
         src/grbl/parsers/status_report/position_parser/PositionParser.test.cpp
-        src/grbl/parsers/welcome_message/WelcomeMessageParser.test.cpp)
+        src/grbl/parsers/welcome_message/WelcomeMessageParser.test.cpp
+)
 
 target_link_libraries(
         grbl-test

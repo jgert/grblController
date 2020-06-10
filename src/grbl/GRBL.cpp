@@ -13,17 +13,22 @@ MachineState::MachineState() : state(State::Idle), code(-1) {}
 
 void GRBL::parse(const QByteArray &data) {
 
-    bool result = true;
-
     QString message(data);
-    QRegExp regexStatus("<{1}(.*)>{1}");
 
-    if (regexStatus.exactMatch(message)) {
-        auto statusMessage = regexStatus.cap(1);
-        result &= parseStatus(statusMessage);
+    if(data.isEmpty()) {
+        return;
     }
 
-    result &= parseWelcomeMessage(message);
+    if (parseStatus(message)) {
+        return;
+    } else if (alarmParser.parse(message.toStdString())) {
+        emit onReceivedAlarm(alarmParser.getAlarmValue());
+        return;
+    } else if (parseWelcomeMessage(message)) {
+        return;
+    } else {
+        emit onParserError("Unsupported message: >>" + message + "<<");
+    }
 }
 
 bool GRBL::parseWelcomeMessage(const QString &message) {
@@ -40,7 +45,15 @@ bool GRBL::parseWelcomeMessage(const QString &message) {
 
 bool GRBL::parseStatus(const QString &message) {
 
-    QStringList list = message.split("|");
+    QRegExp regexStatus("<{1}(.*)>{1}");
+
+    if (!regexStatus.exactMatch(message)) {
+        return false;
+    }
+
+    auto statusMessage = regexStatus.cap(1);
+
+    QStringList list = statusMessage.split("|");
 
     QStringListIterator iterator(list);
 
