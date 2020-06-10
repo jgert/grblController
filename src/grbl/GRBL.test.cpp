@@ -21,6 +21,8 @@ Q_DECLARE_METATYPE(MachineState)
 
 Q_DECLARE_METATYPE(OverriddenValues)
 
+Q_DECLARE_METATYPE(ConfigurationItem)
+
 class GRBLTests : public TestSuite {
 Q_OBJECT
 
@@ -34,6 +36,7 @@ private slots:
         qRegisterMetaType<OverriddenValues>();
         qRegisterMetaType<State>();
         qRegisterMetaType<vec3>();
+        qRegisterMetaType<ConfigurationItem>();
     }
 
     void testIntegrationAlarm() {
@@ -245,8 +248,20 @@ private slots:
         auto state = qvariant_cast<QString>(spy.takeFirst()[0]);
         QCOMPARE(state, "1.1h");
     }
-};
 
+    void testIntegrationConfiguration() {
+        GRBL controller;
+
+        QSignalSpy spy(&controller, &GRBL::onReceivedConfiguration);
+
+        controller.parse("$10=20");
+
+        QCOMPARE(spy.count(), 1);
+        auto state = qvariant_cast<ConfigurationItem>(spy.takeFirst()[0]);
+        QCOMPARE(state.code, 10);
+        QCOMPARE(state.value, "20");
+    }
+};
 
 static GRBLTests T_GRBLTests;
 

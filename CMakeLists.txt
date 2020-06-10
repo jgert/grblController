@@ -68,6 +68,8 @@ set(
         ${SOURCES_PARSER_STATUS_REPORT}
         src/grbl/parsers/welcome_message/WelcomeMessageParser.cpp
         src/grbl/parsers/welcome_message/WelcomeMessageParser.h
+        src/grbl/parsers/configuration/ConfigurationParser.cpp
+        src/grbl/parsers/configuration/ConfigurationParser.h
         )
 
 set(
@@ -77,7 +79,7 @@ set(
         src/SerialPort.h
         ${SOURCES_GRBL}
         ${SOURCES_WIDGETS}
-)
+        )
 
 add_executable(grbl
         src/main.cpp
@@ -112,6 +114,7 @@ add_executable(
         src/grbl/parsers/status_report/overridden_values/OverridenValuesParser.test.cpp
         src/grbl/parsers/status_report/position_parser/PositionParser.test.cpp
         src/grbl/parsers/welcome_message/WelcomeMessageParser.test.cpp
+        src/grbl/parsers/configuration/ConfigurationParser.test.cpp
 )
 
 target_link_libraries(

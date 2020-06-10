@@ -8,8 +8,8 @@
 #include <QObject>
 #include <QString>
 #include <QVector3D>
-
 #include "src/grbl/parsers/alarm/AlarmParser.h"
+#include "src/grbl/parsers/configuration/ConfigurationParser.h"
 #include "src/grbl/parsers/help/HelpParser.h"
 #include "src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.h"
 #include "src/grbl/parsers/status_report/buffer_state/BufferStateParser.h"
@@ -26,6 +26,7 @@ class GRBL : public QObject {
 Q_OBJECT
 private:
     AlarmParser alarmParser;
+    ConfigurationParser configurationParser;
     HelpParser helpParser;
     AccessoryStateParser accessoryStateParser;
     BufferStateParser bufferStateParser;
@@ -42,8 +43,9 @@ private:
 public:
     QStringList error;
 private:
-    
+
     bool parseStatus(const QString &message);
+
     bool parseWelcomeMessage(const QString &message);
 
 public:
@@ -82,6 +84,7 @@ signals:
 
     void onParserError(const QString &message);
 
+    void onReceivedConfiguration(const ConfigurationItem &configItem);
 
 };
 

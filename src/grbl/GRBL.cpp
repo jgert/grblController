@@ -32,10 +32,13 @@ void GRBL::parse(const QByteArray &data) {
         const vector<string> &items = helpParser.getHelpOptions();
         QStringList list;
         list.reserve(items.size());
-        for(const string& s : items) {
+        for (const string &s : items) {
             list.append(QString::fromStdString(s));
         }
         emit onReceivedHelp(list);
+        return;
+    } else if (configurationParser.parse(message)) {
+        emit onReceivedConfiguration(configurationParser.getConfigurationItem());
         return;
     } else {
         emit onParserError("Unsupported message: >>" + str + "<<");
