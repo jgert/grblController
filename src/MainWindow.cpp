@@ -81,6 +81,9 @@ MainWindow::MainWindow(SerialPort *serialPort) :
     setCentralWidget(nullptr);
     setDockOptions(DockOption::AllowNestedDocks | DockOption::AnimatedDocks);
 
+    connect(grbl, &GRBL::onParserError,
+            consoleWidget, &ConsoleWidget::addMessage);
+
     connectSerialPort();
 }
 
