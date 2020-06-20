@@ -31,7 +31,10 @@ set(
         src/widgets/status/StatusWidget.h
         src/widgets/vec3/Vec3Widget.cpp
         src/widgets/vec3/Vec3Widget.h
-        src/widgets/welcome/WelcomeWidget.cpp src/widgets/welcome/WelcomeWidget.h src/widgets/settings/SettingsWidget.cpp src/widgets/settings/SettingsWidget.h)
+        src/widgets/welcome/WelcomeWidget.cpp
+        src/widgets/welcome/WelcomeWidget.h
+        src/widgets/settings/SettingsWidget.cpp
+        src/widgets/settings/SettingsWidget.h)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
@@ -85,7 +88,14 @@ set(
         src/SerialPort.h
         ${SOURCES_GRBL}
         ${SOURCES_WIDGETS}
-        src/widgets/settings/SettingsTableModel.cpp src/widgets/settings/SettingsTableModel.h src/widgets/settings/SettingCodes.cpp src/widgets/settings/SettingCodes.h src/widgets/delegates/LineEditItemDelegate.cpp src/widgets/delegates/LineEditItemDelegate.cpp src/widgets/delegates/LineEditItemDelegate.h src/grbl/Message.cpp src/grbl/Message.h src/grbl/parsers/response_message/ResponseMessageParser.cpp src/grbl/parsers/response_message/ResponseMessageParser.h)
+        src/widgets/settings/SettingsTableModel.cpp
+        src/widgets/settings/SettingsTableModel.h
+        src/widgets/settings/SettingCodes.cpp
+        src/widgets/settings/SettingCodes.h
+        src/widgets/delegates/LineEditItemDelegate.cpp
+        src/widgets/delegates/LineEditItemDelegate.cpp
+        src/widgets/delegates/LineEditItemDelegate.h
+)
 
 add_executable(grbl
         src/main.cpp

@@ -2,8 +2,8 @@
 // Created by Jakub Gert on 10/06/2020.
 //
 
-#ifndef GRBL_CONFIGURATIONWIDGET_H
-#define GRBL_CONFIGURATIONWIDGET_H
+#ifndef GRBL_SETTINGSWIDGET_H
+#define GRBL_SETTINGSWIDGET_H
 
 #include <QWidget>
 #include <QStandardItemModel>
@@ -26,7 +26,7 @@ public:
 
     explicit SettingsWidget(QWidget *parent = nullptr);
 
-    ~SettingsWidget();
+    ~SettingsWidget() override;
 
     void setSettingItem(const SettingItem &settingItem);
 
@@ -39,4 +39,4 @@ signals:
 };
 
 
-#endif //GRBL_CONFIGURATIONWIDGET_H
+#endif //GRBL_SETTINGSWIDGET_H

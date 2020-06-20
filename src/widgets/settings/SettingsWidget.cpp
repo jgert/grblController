@@ -9,7 +9,7 @@
 #include "SettingsWidget.h"
 #include "SettingsTableModel.h"
 #include "../delegates/LineEditItemDelegate.h"
-#include "ui_settingsWidget.h"
+#include "ui_SettingsWidget.h"
 
 SettingsWidget::SettingsWidget(QWidget *parent) :
         QWidget(parent),
