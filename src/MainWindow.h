@@ -13,6 +13,7 @@
 #include "SerialPort.h"
 #include "src/widgets/serialPort/SerialPortWidget.h"
 #include "status/StatusWidget.h"
+#include "src/widgets/settings/SettingsWidget.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -26,6 +27,7 @@ private:
     ConsoleWidget *consoleWidget;
     StatusWidget *statusWidget;
     WelcomeWidget *welcomeWidget;
+    SettingsWidget *settingsWidget;
 
     void createMainMenu();
 
@@ -35,9 +37,15 @@ private:
 
     void registerDockTool(QDockWidget *widget);
 
-private slots:
+    void createToolSettings();
 
-    void connectSerialPort() const;
+    void createToolConsole();
+
+    void createToolSerialPort();
+
+    void createToolWelcome();
+
+    void createToolStatus();
 
 public:
     explicit MainWindow(SerialPort *serialPort);

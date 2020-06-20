@@ -8,8 +8,10 @@
 #include <QObject>
 #include <QString>
 #include <QVector3D>
-
+#include <QQueue>
+#include <src/grbl/parsers/response_message/ResponseMessageParser.h>
 #include "src/grbl/parsers/alarm/AlarmParser.h"
+#include "src/grbl/parsers/setting/SettingParser.h"
 #include "src/grbl/parsers/help/HelpParser.h"
 #include "src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.h"
 #include "src/grbl/parsers/status_report/buffer_state/BufferStateParser.h"
@@ -21,11 +23,13 @@
 #include "src/grbl/parsers/status_report/overridden_values/OverriddenValuesParser.h"
 #include "src/grbl/parsers/status_report/position_parser/PositionParser.h"
 #include "src/grbl/parsers/welcome_message/WelcomeMessageParser.h"
+#include "Message.h"
 
 class GRBL : public QObject {
 Q_OBJECT
 private:
     AlarmParser alarmParser;
+    SettingParser configurationParser;
     HelpParser helpParser;
     AccessoryStateParser accessoryStateParser;
     BufferStateParser bufferStateParser;
@@ -37,20 +41,30 @@ private:
     OverriddenValuesParser overriddenValuesParser;
     PositionParser positionParser;
     WelcomeMessageParser welcomeMessageParser;
+    ResponseMessageParser responseMessageParser;
 
     AccessoryState accessoryState;
+
+    QQueue<Message> queue;
+    QQueue<Message> pendingResponse;
 public:
     QStringList error;
 private:
-    
+
     bool parseStatus(const QString &message);
+
     bool parseWelcomeMessage(const QString &message);
 
 public:
 
     void parse(const QByteArray &data);
 
+public slots:
+    void enqueue(const Message &message);
+
 signals:
+
+    void send(const QByteArray &data);
 
     void onReceivedAlarm(unsigned int code);
 
@@ -82,8 +96,15 @@ signals:
 
     void onParserError(const QString &message);
 
+    void onReceivedSetting(const SettingItem &configItem);
 
+    void onMessageEnqueued(const Message &message) const;
+
+    void onMessageSent(const Message &message) const;
+
+    void onMessageError(const Message &message, unsigned int errorCode) const;
+
+    void onMessageOk(const Message &message) const;
 };
-
 
 #endif //GRBL_GRBL_H

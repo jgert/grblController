@@ -31,16 +31,25 @@ set(
         src/widgets/status/StatusWidget.h
         src/widgets/vec3/Vec3Widget.cpp
         src/widgets/vec3/Vec3Widget.h
-        src/widgets/welcome/WelcomeWidget.cpp src/widgets/welcome/WelcomeWidget.h)
+        src/widgets/welcome/WelcomeWidget.cpp
+        src/widgets/welcome/WelcomeWidget.h
+        src/widgets/settings/SettingsWidget.cpp
+        src/widgets/settings/SettingsWidget.h)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
         src/grbl/GRBL.cpp
         src/grbl/GRBL.h
+        src/grbl/Message.cpp
+        src/grbl/Message.h
         src/grbl/parsers/alarm/AlarmParser.cpp
         src/grbl/parsers/alarm/AlarmParser.h
         src/grbl/parsers/help/HelpParser.cpp
         src/grbl/parsers/help/HelpParser.h
+        src/grbl/parsers/response_message/ResponseMessageParser.cpp
+        src/grbl/parsers/response_message/ResponseMessageParser.h
+        src/grbl/parsers/setting/SettingParser.cpp
+        src/grbl/parsers/setting/SettingParser.h
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.cpp
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.h
         src/grbl/parsers/status_report/buffer_state/BufferStateParser.cpp
@@ -59,16 +68,18 @@ set(
         src/grbl/parsers/status_report/overridden_values/OverriddenValuesParser.h
         src/grbl/parsers/status_report/position_parser/PositionParser.cpp
         src/grbl/parsers/status_report/position_parser/PositionParser.h
+        src/grbl/parsers/welcome_message/WelcomeMessageParser.cpp
+        src/grbl/parsers/welcome_message/WelcomeMessageParser.h
         src/grbl/vec3/vec3.cpp
         src/grbl/vec3/vec3.h
+        src/widgets/settings/SettingCodes.cpp
+        src/widgets/settings/SettingCodes.h
 )
 
 set(
         SOURCES_GRBL
         ${SOURCES_PARSER_STATUS_REPORT}
-        src/grbl/parsers/welcome_message/WelcomeMessageParser.cpp
-        src/grbl/parsers/welcome_message/WelcomeMessageParser.h
-        )
+)
 
 set(
         SOURCES
@@ -77,11 +88,26 @@ set(
         src/SerialPort.h
         ${SOURCES_GRBL}
         ${SOURCES_WIDGETS}
+        src/widgets/settings/SettingsTableModel.cpp
+        src/widgets/settings/SettingsTableModel.h
+        src/widgets/settings/SettingCodes.cpp
+        src/widgets/settings/SettingCodes.h
+        src/widgets/delegates/LineEditItemDelegate.cpp
+        src/widgets/delegates/LineEditItemDelegate.cpp
+        src/widgets/delegates/LineEditItemDelegate.h
 )
 
 add_executable(grbl
         src/main.cpp
         ${SOURCES}
+        resources/resources.qrc
+        )
+
+set_target_properties(grbl PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/resources/Info.plist.in
+        MACOSX_BUNDLE TRUE
+        MACOSX_FRAMEWORK_IDENTIFIER org.cmake.ExecutableTarget
+        RESOURCE "${RESOURCE_FILES}"
         )
 
 target_link_libraries(grbl
@@ -100,8 +126,11 @@ add_executable(
         tests/TestSuite.cpp
         tests/TestSuite.h
         ${SOURCES_GRBL}
+        resources/resources.qrc
         src/grbl/GRBL.test.cpp
         src/grbl/parsers/alarm/AlarmParser.test.cpp
+        src/grbl/parsers/response_message/ResponseMessageParser.test.cpp
+        src/grbl/parsers/setting/SettingParser.test.cpp
         src/grbl/parsers/status_report/accessory_state/AccessoryStateParser.test.cpp
         src/grbl/parsers/status_report/buffer_state/BufferStateParser.test.cpp
         src/grbl/parsers/status_report/feed_rate/FeedRateParser.test.cpp
@@ -112,7 +141,7 @@ add_executable(
         src/grbl/parsers/status_report/overridden_values/OverridenValuesParser.test.cpp
         src/grbl/parsers/status_report/position_parser/PositionParser.test.cpp
         src/grbl/parsers/welcome_message/WelcomeMessageParser.test.cpp
-)
+        src/widgets/settings/SettingsCode.test.cpp)
 
 target_link_libraries(
         grbl-test

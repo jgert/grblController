@@ -20,22 +20,41 @@ void GRBL::parse(const QByteArray &data) {
     }
 
     string message = str.toStdString();
-
+    if(responseMessageParser.parse(message)) {
+        switch (responseMessageParser.getResult()) {
+            case ResponseMessageParser::Ok:
+                if(!pendingResponse.isEmpty()) {
+                    auto firstPending = pendingResponse.dequeue();
+                    emit onMessageOk(firstPending);
+                }
+                return;
+            case ResponseMessageParser::Error:
+                if(!pendingResponse.isEmpty()) {
+                    auto firstPending = pendingResponse.dequeue();
+                    emit onMessageError(firstPending, responseMessageParser.getError());
+                }
+                return;
+        }
+    } else
     if (parseStatus(str)) {
         return;
     } else if (alarmParser.parse(message)) {
         emit onReceivedAlarm(alarmParser.getAlarmValue());
         return;
     } else if (parseWelcomeMessage(str)) {
+        enqueue(Message::messageSettings());
         return;
     } else if (helpParser.parse(message)) {
         const vector<string> &items = helpParser.getHelpOptions();
         QStringList list;
         list.reserve(items.size());
-        for(const string& s : items) {
+        for (const string &s : items) {
             list.append(QString::fromStdString(s));
         }
         emit onReceivedHelp(list);
+        return;
+    } else if (configurationParser.parse(message)) {
+        emit onReceivedSetting(configurationParser.getConfigurationItem());
         return;
     } else {
         emit onParserError("Unsupported message: >>" + str + "<<");
@@ -104,4 +123,15 @@ bool GRBL::parseStatus(const QString &message) {
     }
 
     return result;
+}
+
+void GRBL::enqueue(const Message &message) {
+
+    queue.enqueue(message);
+    emit onMessageEnqueued(message);
+
+    pendingResponse.enqueue(message);
+    qDebug() << "Pending response count:" << pendingResponse.count();
+    emit send(queue.dequeue().data);
+    emit onMessageSent(message);
 }

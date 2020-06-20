@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QDebug>
 #include <QFileDialog>
+#include <src/grbl/Message.h>
 #include "ConsoleWidget.h"
 #include "ui_ConsoleWidget.h"
 
@@ -101,18 +102,13 @@ void ConsoleWidget::sendMessage() {
     }
     historyIndex = history->count();
 
-    emit onSendMessage((text + "\n").toLocal8Bit());
+    emit enqueueMessage(Message::custom(text + "\n"));
     ui->lineEditCommand->setPlaceholderText(text);
     ui->lineEditCommand->clear();
 }
 
 void ConsoleWidget::clearConsole() {
     ui->plainTextEdit->clear();
-}
-
-void ConsoleWidget::slot_receivedData(const QByteArray &data) {
-
-    addMessage(QString(data));
 }
 
 void ConsoleWidget::addMessage(const QString &message) {
@@ -139,4 +135,38 @@ void ConsoleWidget::saveConsoleLog() {
     file->open(QIODevice::OpenMode(QIODevice::WriteOnly));
     file->write(QByteArray(ui->plainTextEdit->toPlainText().toUtf8()));
     file->close();
+}
+
+void ConsoleWidget::messageEnqueued(const Message &message) {
+    QStringList str;
+    str << "Enqueued";
+    str << QString::number(message.id);
+    str << message.data;
+    ui->plainTextEdit->appendPlainText(str.join(" "));
+}
+
+void ConsoleWidget::messageSent(const Message &message) {
+    QStringList str;
+    str << "Sent";
+    str << QString::number(message.id);
+    str << message.data;
+    ui->plainTextEdit->appendPlainText(str.join(" "));
+}
+
+void ConsoleWidget::messageError(const Message &message, unsigned int errorCode) {
+    QStringList str;
+    str << "Error for";
+    str << QString::number(message.id);
+    str << message.data;
+    str << "Error code";
+    str << QString::number(errorCode);
+    ui->plainTextEdit->appendPlainText(str.join(" "));
+}
+
+void ConsoleWidget::messageOk(const Message &message) {
+    QStringList str;
+    str << "OK for";
+    str << QString::number(message.id);
+    str << message.data;
+    ui->plainTextEdit->appendPlainText(str.join(" "));
 }

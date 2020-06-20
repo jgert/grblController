@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource>
+        <file>csv/setting_codes_en_US.csv</file>
+    </qresource>
+</RCC>
