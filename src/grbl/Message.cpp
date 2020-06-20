@@ -38,3 +38,7 @@ Message Message::messageSetSetting(const SettingItem &item) {
 
     return Message(list.join("").toLocal8Bit());
 }
+
+Message Message::messageKillAlarm() {
+    return Message("$X\n");
+}

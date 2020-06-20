@@ -16,10 +16,11 @@ struct Message {
 private:
     explicit Message(const QByteArray &data);
 public:
-    static Message messageInfo();
-    static Message messageSettings();
-    static Message messageSetSetting(const SettingItem &item);
     static Message custom(const QString &message);
+    static Message messageInfo();
+    static Message messageKillAlarm();
+    static Message messageSetSetting(const SettingItem &item);
+    static Message messageSettings();
 };
 
 
