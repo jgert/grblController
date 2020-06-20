@@ -6,6 +6,7 @@
 #define CONSOLEWIDGET_H
 
 #include <QWidget>
+#include <src/grbl/Message.h>
 
 namespace Ui {
     class ConsoleWidget;
@@ -35,12 +36,15 @@ private:
 
 public slots:
 
-    void slot_receivedData(const QByteArray &data);
-
     void addMessage(const QString &message);
 
+    void messageEnqueued(const Message &message);
+    void messageSent(const Message &message);
+    void messageError(const Message &message, unsigned int errorCode);
+    void messageOk(const Message &message);
+
 signals:
-    void onSendMessage(const QByteArray &data);
+    void enqueueMessage(const Message &message);
 };
 
 #endif // CONSOLEWIDGET_H

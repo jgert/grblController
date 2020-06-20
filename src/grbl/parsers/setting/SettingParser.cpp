@@ -3,9 +3,9 @@
 //
 
 #include <regex>
-#include "ConfigurationParser.h"
+#include "SettingParser.h"
 
-bool ConfigurationParser::parse(const string &message) {
+bool SettingParser::parse(const string &message) {
 
     static regex r("^\\$([0-9]+)=(.*)$");
 
@@ -21,6 +21,6 @@ bool ConfigurationParser::parse(const string &message) {
     return true;
 }
 
-const ConfigurationItem &ConfigurationParser::getConfigurationItem() const {
+const SettingItem &SettingParser::getConfigurationItem() const {
     return configItem;
 }

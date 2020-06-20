@@ -14,69 +14,22 @@
 MainWindow::MainWindow(SerialPort *serialPort) :
         grbl(new GRBL()),
         serialPort(serialPort),
+        menuTools(nullptr),
+        actionFloatingDocks(nullptr),
         widgetTools(new QSet<QDockWidget *>),
         serialPortWidget(new SerialPortWidget()),
         consoleWidget(new ConsoleWidget()),
         statusWidget(new StatusWidget()),
-        welcomeWidget(new WelcomeWidget()) {
+        welcomeWidget(new WelcomeWidget()),
+        settingsWidget(new SettingsWidget()) {
 
     createMainMenu();
 
-    QDockWidget *dockWidget;
-
-    dockWidget = new QDockWidget();
-    dockWidget->setWindowTitle("Serial port");
-    dockWidget->setWidget(serialPortWidget);
-    addDockWidget(Qt::DockWidgetArea::TopDockWidgetArea, dockWidget);
-    registerDockTool(dockWidget);
-
-    dockWidget = new QDockWidget();
-    dockWidget->setWindowTitle("Console");
-    dockWidget->setWidget(consoleWidget);
-    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWidget);
-    registerDockTool(dockWidget);
-    connect(
-            consoleWidget, &ConsoleWidget::onSendMessage,
-            serialPort, &SerialPort::send);
-
-    dockWidget = new QDockWidget();
-    dockWidget->setWindowTitle("Status");
-    dockWidget->setWidget(statusWidget);
-    addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dockWidget);
-    registerDockTool(dockWidget);
-
-    dockWidget = new QDockWidget();
-    dockWidget->setWindowTitle("Welcome");
-    dockWidget->setWidget(welcomeWidget);
-    addDockWidget(
-            Qt::DockWidgetArea::RightDockWidgetArea,
-            dockWidget);
-    registerDockTool(dockWidget);
-    connect(grbl, &GRBL::onReceivedWelcomeMessage,
-            welcomeWidget, &WelcomeWidget::setVersion);
-
-    connect(grbl, &GRBL::onReceivedAccessoryState,
-            statusWidget, &StatusWidget::setAccessoryState);
-    connect(grbl, &GRBL::onReceivedBufferState,
-            statusWidget, &StatusWidget::setBufferState);
-    connect(grbl, &GRBL::onReceivedFeedRate,
-            statusWidget, &StatusWidget::setFeedRate);
-    connect(grbl, &GRBL::onReceivedSpindleSpeed,
-            statusWidget, &StatusWidget::setSpindleSpeed);
-    connect(grbl, &GRBL::onReceivedInputPinState,
-            statusWidget, &StatusWidget::setInputPinState);
-    connect(grbl, &GRBL::onReceivedLineNumber,
-            statusWidget, &StatusWidget::setLineNumber);
-    connect(grbl, &GRBL::onReceivedMachineState,
-            statusWidget, &StatusWidget::setMachineState);
-    connect(grbl, &GRBL::onReceivedOverriddenValues,
-            statusWidget, &StatusWidget::setOverriddenValues);
-    connect(grbl, &GRBL::onReceivedMPos,
-            statusWidget, &StatusWidget::setMachinePosition);
-    connect(grbl, &GRBL::onReceivedWPos,
-            statusWidget, &StatusWidget::setWorkPosition);
-    connect(grbl, &GRBL::onReceivedWorkCoordinateOffset,
-            statusWidget, &StatusWidget::setWorkCoordinateOffset);
+    createToolSerialPort();
+    createToolWelcome();
+    createToolConsole();
+    createToolSettings();
+    createToolStatus();
 
     setCentralWidget(nullptr);
     setDockOptions(DockOption::AllowNestedDocks | DockOption::AnimatedDocks);
@@ -84,7 +37,12 @@ MainWindow::MainWindow(SerialPort *serialPort) :
     connect(grbl, &GRBL::onParserError,
             consoleWidget, &ConsoleWidget::addMessage);
 
-    connectSerialPort();
+    connect(grbl, &GRBL::send,
+            serialPort, &SerialPort::send);
+
+    connect(
+            serialPort, &SerialPort::receivedData,
+            grbl, &GRBL::parse);
 }
 
 void MainWindow::createMainMenu() {
@@ -110,8 +68,8 @@ void MainWindow::registerDockTool(QDockWidget *widget) {
     widgetTools->insert(widget);
 
     QAction *action;
-    qDebug() << widget->windowTitle();
     action = menuTools->addAction(widget->windowTitle());
+    action->setMenuRole(QAction::NoRole);
     action->setCheckable(true);
     action->setChecked(true);
 
@@ -128,19 +86,6 @@ void MainWindow::registerDockTool(QDockWidget *widget) {
             });
 }
 
-void MainWindow::connectSerialPort() const {
-
-    connect(
-            serialPortWidget, &SerialPortWidget::serialPortChange,
-            serialPort, &SerialPort::openPort);
-    connect(
-            serialPort, &SerialPort::receivedData,
-            consoleWidget, &ConsoleWidget::slot_receivedData);
-    connect(
-            serialPort, &SerialPort::receivedData,
-            grbl, &GRBL::parse);
-}
-
 void MainWindow::actionFloatingDocks_checked(bool checked) {
     QSetIterator<QDockWidget *> iterator(*widgetTools);
     while (iterator.hasNext()) {
@@ -151,4 +96,99 @@ void MainWindow::actionFloatingDocks_checked(bool checked) {
             widget->setTitleBarWidget(new QWidget());
         }
     }
+}
+
+void MainWindow::createToolSettings() {
+    auto dockWidget = new QDockWidget();
+    dockWidget->setWindowTitle("Settings");
+    dockWidget->setWidget(settingsWidget);
+    addDockWidget(
+            Qt::DockWidgetArea::RightDockWidgetArea,
+            dockWidget);
+    registerDockTool(dockWidget);
+    connect(grbl, &GRBL::onReceivedSetting,
+            settingsWidget, &SettingsWidget::setSettingItem);
+    connect(settingsWidget, &SettingsWidget::enqueueMessage,
+            grbl, &GRBL::enqueue);
+}
+
+void MainWindow::createToolConsole() {
+    auto dockWidget = new QDockWidget();
+    dockWidget->setWindowTitle("Console");
+    dockWidget->setWidget(consoleWidget);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWidget);
+    registerDockTool(dockWidget);
+
+    connect(consoleWidget, &ConsoleWidget::enqueueMessage,
+            grbl, &GRBL::enqueue);
+
+    connect(grbl, &GRBL::onMessageEnqueued,
+            consoleWidget, &ConsoleWidget::messageEnqueued);
+
+    connect(grbl, &GRBL::onMessageSent,
+            consoleWidget, &ConsoleWidget::messageSent);
+
+    connect(grbl, &GRBL::onMessageError,
+            consoleWidget, &ConsoleWidget::messageError);
+
+    connect(grbl, &GRBL::onMessageOk,
+            consoleWidget, &ConsoleWidget::messageOk);
+}
+
+void MainWindow::createToolSerialPort() {
+    auto dockWidget = new QDockWidget();
+    dockWidget->setWindowTitle("Serial port");
+    dockWidget->setWidget(serialPortWidget);
+    addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, dockWidget);
+
+    registerDockTool(dockWidget);
+
+    connect(
+            serialPortWidget, &SerialPortWidget::serialPortChange,
+            serialPort, &SerialPort::openPort);
+}
+
+void MainWindow::createToolWelcome() {
+    auto dockWidget = new QDockWidget();
+    dockWidget->setWindowTitle("Welcome");
+    dockWidget->setWidget(welcomeWidget);
+    addDockWidget(
+            Qt::DockWidgetArea::LeftDockWidgetArea,
+            dockWidget);
+    registerDockTool(dockWidget);
+
+    connect(grbl, &GRBL::onReceivedWelcomeMessage,
+            welcomeWidget, &WelcomeWidget::setVersion);
+}
+
+void MainWindow::createToolStatus() {
+
+    auto dockWidget = new QDockWidget();
+    dockWidget->setWindowTitle("Status");
+    dockWidget->setWidget(statusWidget);
+    addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dockWidget);
+    registerDockTool(dockWidget);
+
+    connect(grbl, &GRBL::onReceivedAccessoryState,
+            statusWidget, &StatusWidget::setAccessoryState);
+    connect(grbl, &GRBL::onReceivedBufferState,
+            statusWidget, &StatusWidget::setBufferState);
+    connect(grbl, &GRBL::onReceivedFeedRate,
+            statusWidget, &StatusWidget::setFeedRate);
+    connect(grbl, &GRBL::onReceivedSpindleSpeed,
+            statusWidget, &StatusWidget::setSpindleSpeed);
+    connect(grbl, &GRBL::onReceivedInputPinState,
+            statusWidget, &StatusWidget::setInputPinState);
+    connect(grbl, &GRBL::onReceivedLineNumber,
+            statusWidget, &StatusWidget::setLineNumber);
+    connect(grbl, &GRBL::onReceivedMachineState,
+            statusWidget, &StatusWidget::setMachineState);
+    connect(grbl, &GRBL::onReceivedOverriddenValues,
+            statusWidget, &StatusWidget::setOverriddenValues);
+    connect(grbl, &GRBL::onReceivedMPos,
+            statusWidget, &StatusWidget::setMachinePosition);
+    connect(grbl, &GRBL::onReceivedWPos,
+            statusWidget, &StatusWidget::setWorkPosition);
+    connect(grbl, &GRBL::onReceivedWorkCoordinateOffset,
+            statusWidget, &StatusWidget::setWorkCoordinateOffset);
 }
