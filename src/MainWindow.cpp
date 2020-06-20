@@ -21,7 +21,8 @@ MainWindow::MainWindow(SerialPort *serialPort) :
         consoleWidget(new ConsoleWidget()),
         statusWidget(new StatusWidget()),
         welcomeWidget(new WelcomeWidget()),
-        settingsWidget(new SettingsWidget()) {
+        settingsWidget(new SettingsWidget()),
+        alarmWidget(new AlarmWidget()) {
 
     createMainMenu();
 
@@ -30,6 +31,7 @@ MainWindow::MainWindow(SerialPort *serialPort) :
     createToolConsole();
     createToolSettings();
     createToolStatus();
+    createToolAlarm();
 
     setCentralWidget(nullptr);
     setDockOptions(DockOption::AllowNestedDocks | DockOption::AnimatedDocks);
@@ -191,4 +193,24 @@ void MainWindow::createToolStatus() {
             statusWidget, &StatusWidget::setWorkPosition);
     connect(grbl, &GRBL::onReceivedWorkCoordinateOffset,
             statusWidget, &StatusWidget::setWorkCoordinateOffset);
+}
+
+void MainWindow::createToolAlarm() {
+    auto dockWidget = new QDockWidget();
+    dockWidget->setWindowTitle("Alarm");
+    dockWidget->setWidget(alarmWidget);
+    addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, dockWidget);
+    registerDockTool(dockWidget);
+
+    connect(grbl, &GRBL::onReceivedAlarm,
+            alarmWidget, &AlarmWidget::setAlarm);
+
+    connect(alarmWidget, &AlarmWidget::enqueueMessage,
+            grbl, &GRBL::enqueue);
+
+    connect(grbl, &GRBL::onMessageOk,
+            alarmWidget, &AlarmWidget::messageOk);
+
+    connect(grbl, &GRBL::onMessageError,
+            alarmWidget, &AlarmWidget::messageError);
 }

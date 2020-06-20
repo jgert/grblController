@@ -10,6 +10,7 @@
 #include <src/widgets/console/ConsoleWidget.h>
 #include <src/grbl/GRBL.h>
 #include <src/widgets/welcome/WelcomeWidget.h>
+#include <src/widgets/alarm/AlarmWidget.h>
 #include "SerialPort.h"
 #include "src/widgets/serialPort/SerialPortWidget.h"
 #include "status/StatusWidget.h"
@@ -28,6 +29,7 @@ private:
     StatusWidget *statusWidget;
     WelcomeWidget *welcomeWidget;
     SettingsWidget *settingsWidget;
+    AlarmWidget *alarmWidget;
 
     void createMainMenu();
 
@@ -46,6 +48,8 @@ private:
     void createToolWelcome();
 
     void createToolStatus();
+
+    void createToolAlarm();
 
 public:
     explicit MainWindow(SerialPort *serialPort);

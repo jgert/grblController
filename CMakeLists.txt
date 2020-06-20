@@ -34,7 +34,9 @@ set(
         src/widgets/welcome/WelcomeWidget.cpp
         src/widgets/welcome/WelcomeWidget.h
         src/widgets/settings/SettingsWidget.cpp
-        src/widgets/settings/SettingsWidget.h)
+        src/widgets/settings/SettingsWidget.h
+        src/widgets/alarm/AlarmCodes.cpp
+        src/widgets/alarm/AlarmCodes.h src/widgets/alarm/AlarmWidget.cpp src/widgets/alarm/AlarmWidget.h)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
