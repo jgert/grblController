@@ -76,7 +76,7 @@ set(
         src/grbl/vec3/vec3.h
         src/widgets/settings/SettingCodes.cpp
         src/widgets/settings/SettingCodes.h
-)
+    )
 
 set(
         SOURCES_GRBL
@@ -124,12 +124,10 @@ set(COVERAGE_EXCLUDES **/*.test.*)
 
 add_executable(
         grbl-test
-        tests/main.cpp
-        tests/TestSuite.cpp
-        tests/TestSuite.h
         ${SOURCES_GRBL}
         resources/resources.qrc
         src/grbl/GRBL.test.cpp
+        src/grbl/Message.test.cpp
         src/grbl/parsers/alarm/AlarmParser.test.cpp
         src/grbl/parsers/response_message/ResponseMessageParser.test.cpp
         src/grbl/parsers/setting/SettingParser.test.cpp
@@ -143,7 +141,10 @@ add_executable(
         src/grbl/parsers/status_report/overridden_values/OverridenValuesParser.test.cpp
         src/grbl/parsers/status_report/position_parser/PositionParser.test.cpp
         src/grbl/parsers/welcome_message/WelcomeMessageParser.test.cpp
-        src/widgets/settings/SettingsCode.test.cpp)
+        src/widgets/settings/SettingsCode.test.cpp
+        tests/TestSuite.cpp
+        tests/TestSuite.h
+        tests/main.cpp)
 
 target_link_libraries(
         grbl-test
