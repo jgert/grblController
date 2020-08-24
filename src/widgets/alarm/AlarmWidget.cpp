@@ -9,6 +9,7 @@ AlarmWidget::AlarmWidget(QWidget *parent) :
         QWidget(parent),
         ui(new Ui::AlarmWidget),
         alarmCodes(new AlarmCodes(":/csv/alarm_codes_en_US.csv")),
+        errorCodes(new ErrorCodes(":/csv/error_codes_en_US.csv")),
         pendingResponse(nullptr) {
 
     ui->setupUi(this);
@@ -31,6 +32,9 @@ AlarmWidget::~AlarmWidget() {
     delete alarmCodes;
     alarmCodes = nullptr;
 
+    delete errorCodes;
+    errorCodes = nullptr;
+
     delete pendingResponse;
     pendingResponse = nullptr;
 }
@@ -52,7 +56,8 @@ void AlarmWidget::onKillAlarmClicked() {
 
 void AlarmWidget::messageError(const Message &message, unsigned int errorCode) {
     if (pendingResponse && message.id == pendingResponse->id) {
-        //TODO: Add error handler here
+        auto item = errorCodes->getErrorCodeItem(errorCode);
+        ui->label->setText(item.description);
     }
 }
 
