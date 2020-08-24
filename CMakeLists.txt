@@ -35,8 +35,8 @@ set(
         src/widgets/welcome/WelcomeWidget.h
         src/widgets/settings/SettingsWidget.cpp
         src/widgets/settings/SettingsWidget.h
-        src/widgets/alarm/AlarmCodes.cpp
-        src/widgets/alarm/AlarmCodes.h src/widgets/alarm/AlarmWidget.cpp src/widgets/alarm/AlarmWidget.h)
+        src/utils/AlarmCodes.cpp
+        src/utils/AlarmCodes.h src/widgets/alarm/AlarmWidget.cpp src/widgets/alarm/AlarmWidget.h)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
@@ -74,8 +74,8 @@ set(
         src/grbl/parsers/welcome_message/WelcomeMessageParser.h
         src/grbl/vec3/vec3.cpp
         src/grbl/vec3/vec3.h
-        src/widgets/settings/SettingCodes.cpp
-        src/widgets/settings/SettingCodes.h
+        src/utils/SettingCodes.cpp
+        src/utils/SettingCodes.h
     )
 
 set(
@@ -92,12 +92,12 @@ set(
         ${SOURCES_WIDGETS}
         src/widgets/settings/SettingsTableModel.cpp
         src/widgets/settings/SettingsTableModel.h
-        src/widgets/settings/SettingCodes.cpp
-        src/widgets/settings/SettingCodes.h
+        src/utils/SettingCodes.cpp
+        src/utils/SettingCodes.h
         src/widgets/delegates/LineEditItemDelegate.cpp
         src/widgets/delegates/LineEditItemDelegate.cpp
         src/widgets/delegates/LineEditItemDelegate.h
-)
+        src/utils/ErrorCodes.cpp src/utils/ErrorCodes.h)
 
 add_executable(grbl
         src/main.cpp
@@ -141,7 +141,7 @@ add_executable(
         src/grbl/parsers/status_report/overridden_values/OverridenValuesParser.test.cpp
         src/grbl/parsers/status_report/position_parser/PositionParser.test.cpp
         src/grbl/parsers/welcome_message/WelcomeMessageParser.test.cpp
-        src/widgets/settings/SettingsCode.test.cpp
+        src/utils/SettingCodes.test.cpp
         tests/TestSuite.cpp
         tests/TestSuite.h
         tests/main.cpp)
