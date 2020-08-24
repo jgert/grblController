@@ -7,7 +7,7 @@
 #include "tests/TestSuite.h"
 #include "SettingCodes.h"
 
-class SettingsCodeTests: TestSuite {
+class SettingCodesTests: TestSuite {
     Q_OBJECT
 
 private slots:
@@ -17,5 +17,5 @@ private slots:
     }
 };
 
-static SettingsCodeTests T_SettingsCodeTests;
-#include "SettingsCode.test.moc"
+static SettingCodesTests T_SettingCodeTests;
+#include "SettingCodes.test.moc"
