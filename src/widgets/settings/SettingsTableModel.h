@@ -7,7 +7,7 @@
 
 #include <QAbstractTableModel>
 #include <src/grbl/parsers/setting/SettingParser.h>
-#include "SettingCodes.h"
+#include "src/utils/SettingCodes.h"
 
 class SettingsTableModel: public QAbstractTableModel {
     Q_OBJECT
