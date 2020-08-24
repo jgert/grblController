@@ -7,6 +7,7 @@
 
 #include <QWidget>
 #include <src/grbl/Message.h>
+#include <src/utils/ErrorCodes.h>
 
 namespace Ui {
     class ConsoleWidget;
@@ -21,6 +22,7 @@ private:
     QAction *actionClearLog;
     QStringList *history;
     int historyIndex;
+    ErrorCodes *errorCodes;
     void clearConsole();
     void saveConsoleLog();
     void sendMessage();

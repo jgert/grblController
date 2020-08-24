@@ -15,6 +15,7 @@ ConsoleWidget::ConsoleWidget(QWidget *parent) :
         QWidget(parent),
         history(new QStringList()),
         historyIndex(0),
+        errorCodes(new ErrorCodes(":/csv/error_codes_en_US.csv")),
         ui(new Ui::ConsoleWidget) {
 
     ui->setupUi(this);
@@ -160,6 +161,12 @@ void ConsoleWidget::messageError(const Message &message, unsigned int errorCode)
     str << message.data;
     str << "Error code";
     str << QString::number(errorCode);
+
+    auto item = errorCodes->getErrorCodeItem(errorCode);
+    str << item.name;
+    str << "=>";
+    str << item.description;
+
     ui->plainTextEdit->appendPlainText(str.join(" "));
 }
 
