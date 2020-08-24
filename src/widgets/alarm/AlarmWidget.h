@@ -7,7 +7,8 @@
 
 #include <QWidget>
 #include <src/grbl/Message.h>
-#include "AlarmCodes.h"
+#include <src/utils/ErrorCodes.h>
+#include "src/utils/AlarmCodes.h"
 
 namespace Ui {
     class AlarmWidget;
@@ -18,6 +19,7 @@ class AlarmWidget: public QWidget {
 private:
     Ui::AlarmWidget *ui;
     AlarmCodes *alarmCodes;
+    ErrorCodes *errorCodes;
     Message *pendingResponse;
 private slots:
     void onKillAlarmClicked();
