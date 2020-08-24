@@ -1,8 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
     <qresource>
-        <file>csv/setting_codes_en_US.csv</file>
-    </qresource>
-    <qresource>
         <file>csv/alarm_codes_en_US.csv</file>
+        <file>csv/error_codes_en_US.csv</file>
+        <file>csv/setting_codes_en_US.csv</file>
     </qresource>
 </RCC>
