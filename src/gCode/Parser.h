@@ -12,35 +12,44 @@ using namespace std;
 
 namespace gCode {
 
+    typedef uint32_t LineNumber_t;
+
     struct Chunk {
         typedef enum {
+            Error,
             Percent,
             Command,
             LineNumber,
             M,
             Address,
-            Tool
+            Tool,
+            Comment,
         } Type;
 
         Chunk::Type type;
         string comment;
-        bool hasLineNumber = false;
-        uint32_t lineNumber = 0;
+        bool hasProgramLineNumber = false;
+        LineNumber_t programLineNumber = 0;
         uint8_t command = 0;
         bool hasSubcommand = false;
         uint8_t subcommand = false;
         char address;
         float value = 0;
+        LineNumber_t lineNumber = 0;
+        LineNumber_t startPosition = 0;
+        LineNumber_t length = 0;
+    };
+
+    struct Block {
+        vector<Chunk> chunks;
     };
 
     class Parser {
-        vector<Chunk> parsedChunks;
-        Chunk current;
-        string error;
+        vector<Block> parsed_blocks;
     public:
         bool parse(const string &line);
 
-        const vector<Chunk> &chunks();
+        const vector<Block>& blocks() const;
     };
 }
 #endif //GRBL_PARSER_H
