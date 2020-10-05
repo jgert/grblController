@@ -18,11 +18,6 @@ bool HelpParser::parse(const string &message) {
     }
     smatch sm;
     string captured = cm1.str();
-    if (regex_search(captured, sm, r2)) {
-        for (size_t i = 1; i < sm.size(); i++) {
-            cout << sm[i] << endl;
-        }
-    }
 
     string content = cm1[1];
 
