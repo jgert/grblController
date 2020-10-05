@@ -19,6 +19,7 @@ public:
     void toggleBreakpoint(int lineNumber);
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    ~CodeEditorWidget() override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);

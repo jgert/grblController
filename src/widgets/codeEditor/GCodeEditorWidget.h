@@ -6,13 +6,15 @@
 #define GRBL_GCODEEDITORWIDGET_H
 
 #include "CodeEditorWidget.h"
+#include "GCodeSyntaxHighlighter.h"
 
 class GCodeEditorWidget : public CodeEditorWidget {
     Q_OBJECT
+private:
+    GCodeSyntaxHighlighter *highlighter;
 public:
     explicit GCodeEditorWidget(QWidget *parent = nullptr);
-private slots:
-    void onTextChanged();
+    virtual ~GCodeEditorWidget();
 };
 
 

@@ -7,8 +7,9 @@
 #include "CodeEditorWidget.h"
 #include "LineNumberWidget.h"
 
-CodeEditorWidget::CodeEditorWidget(QWidget *parent) : QPlainTextEdit(parent) {
-    lineNumberArea = new LineNumberWidget(this);
+CodeEditorWidget::CodeEditorWidget(QWidget *parent) :
+        QPlainTextEdit(parent),
+        lineNumberArea(new LineNumberWidget(this)) {
 
     connect(
             this, &CodeEditorWidget::blockCountChanged,
@@ -23,6 +24,11 @@ CodeEditorWidget::CodeEditorWidget(QWidget *parent) : QPlainTextEdit(parent) {
     setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     updateLineNumberAreaWidth(0);
+}
+
+CodeEditorWidget::~CodeEditorWidget() {
+    delete lineNumberArea;
+    lineNumberArea = nullptr;
 }
 
 int CodeEditorWidget::lineNumberAreaWidth() {
@@ -97,7 +103,7 @@ void CodeEditorWidget::lineNumberAreaPaintEvent(QPaintEvent *event) {
                 painter.setPen(Qt::black);
             }
             QString number = QString::number(blockNumber + 1);
-            painter.drawText(0, top, lineNumberArea->width()-2, fontMetrics().height(),
+            painter.drawText(0, top, lineNumberArea->width() - 2, fontMetrics().height(),
                              Qt::AlignRight, number);
         }
 

@@ -3,21 +3,15 @@
 //
 
 #include <QDebug>
+#include <src/gCode/Parser.h>
 #include "GCodeEditorWidget.h"
 
 GCodeEditorWidget::GCodeEditorWidget(QWidget *parent) :
-        CodeEditorWidget(parent) {
-
-    connect(
-            this, &GCodeEditorWidget::textChanged,
-            this, &GCodeEditorWidget::onTextChanged);
+        CodeEditorWidget(parent),
+        highlighter(new GCodeSyntaxHighlighter(this->document())) {
 }
 
-void GCodeEditorWidget::onTextChanged() {
-
-    auto text = document()->toPlainText();
-    qDebug() << text;
-//    auto program = gpr::parse_gcode(text.toStdString());
-
-//    qDebug() << program.num_blocks();
+GCodeEditorWidget::~GCodeEditorWidget() {
+    delete highlighter;
+    highlighter = nullptr;
 }
