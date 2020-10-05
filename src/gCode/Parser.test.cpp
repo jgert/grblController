@@ -110,13 +110,29 @@ private slots:
         QCOMPARE(parser.parse("X +4.0"), true);
         QCOMPARE(parser.parse("X +5.0"), true);
         QCOMPARE(parser.parse("X -6.0"), true);
-        QCOMPARE(parser.blocks().size(), 6);
+        QCOMPARE(parser.parse("X -7."), true);
+        QCOMPARE(parser.blocks().size(), 7);
         QCOMPARE(parser.blocks()[0].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[0].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[0].chunks[0].value, -1.0);
         QCOMPARE(parser.blocks()[1].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[1].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[1].chunks[0].value, -2.0);
         QCOMPARE(parser.blocks()[2].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[2].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[2].chunks[0].value, 3.0);
         QCOMPARE(parser.blocks()[3].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[3].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[3].chunks[0].value, 4.0);
         QCOMPARE(parser.blocks()[4].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[4].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[4].chunks[0].value, 5.0);
         QCOMPARE(parser.blocks()[5].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[5].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[5].chunks[0].value, -6.0);
+        QCOMPARE(parser.blocks()[5].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[6].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[6].chunks[0].value, -7.0);
     }
 
     void testInvalid() {
@@ -136,6 +152,47 @@ private slots:
         QCOMPARE(parser.blocks().size(), 2);
         QCOMPARE(parser.blocks()[0].chunks[0].startPosition, 0);
         QCOMPARE(parser.blocks()[1].chunks[0].startPosition, 0);
+    }
+
+    void testComment1() {
+        gCode::Parser parser;
+        auto result = parser.parse("G20 ; comment G30");
+        QCOMPARE(result, true);
+        QCOMPARE(parser.blocks().size(), 1);
+        QCOMPARE(parser.blocks()[0].chunks.size(), 2);
+        QCOMPARE(parser.blocks()[0].chunks[0].type, gCode::Chunk::Command);
+        QCOMPARE(parser.blocks()[0].chunks[0].command, 20);
+        QCOMPARE(parser.blocks()[0].chunks[1].type, gCode::Chunk::Comment);
+        QCOMPARE(parser.blocks()[0].chunks[1].type, gCode::Chunk::Comment);
+        QCOMPARE(parser.blocks()[0].chunks[1].comment, "; comment G30");
+    }
+
+    void testCommentInline1() {
+        gCode::Parser parser;
+        auto result = parser.parse("G10 (G2 comment G01) G11");
+        QCOMPARE(result, true);
+        QCOMPARE(parser.blocks().size(), 1);
+        QCOMPARE(parser.blocks()[0].chunks.size(), 3);
+        QCOMPARE(parser.blocks()[0].chunks[0].type, gCode::Chunk::Command);
+        QCOMPARE(parser.blocks()[0].chunks[0].command, 10);
+        QCOMPARE(parser.blocks()[0].chunks[1].type, gCode::Chunk::Comment);
+        QCOMPARE(parser.blocks()[0].chunks[1].comment, "(G2 comment G01)");
+        QCOMPARE(parser.blocks()[0].chunks[2].type, gCode::Chunk::Command);
+        QCOMPARE(parser.blocks()[0].chunks[2].command, 11);
+    }
+
+    void testCommentInline2() {
+        gCode::Parser parser;
+        auto result = parser.parse("G10 [G2 comment G01] G11");
+        QCOMPARE(result, true);
+        QCOMPARE(parser.blocks().size(), 1);
+        QCOMPARE(parser.blocks()[0].chunks.size(), 3);
+        QCOMPARE(parser.blocks()[0].chunks[0].type, gCode::Chunk::Command);
+        QCOMPARE(parser.blocks()[0].chunks[0].command, 10);
+        QCOMPARE(parser.blocks()[0].chunks[1].type, gCode::Chunk::Comment);
+        QCOMPARE(parser.blocks()[0].chunks[1].comment, "[G2 comment G01]");
+        QCOMPARE(parser.blocks()[0].chunks[2].type, gCode::Chunk::Command);
+        QCOMPARE(parser.blocks()[0].chunks[2].command, 11);
     }
 
     void testBlock() {

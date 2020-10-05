@@ -49,6 +49,16 @@ namespace gCode {
                     return true;
                 }
 
+                static regex regexComment(R"(^\(.*\)|^;.*|^\[.*\])");
+                if (regex_search(sourceLine, cm, regexComment)) {
+                    chunk.type = Chunk::Comment;
+                    chunk.length = cm.length();
+                    chunk.comment = cm.str();
+                    block.chunks.push_back(chunk);
+                    begin += cm.length(0);
+                    continue;
+                }
+
                 static regex regexLineNumber(R"(^[N]([0-9]+))");
                 if (regex_search(currentLine, cm, regexLineNumber)) {
                     chunk.type = Chunk::LineNumber;
@@ -103,7 +113,7 @@ namespace gCode {
                 }
 
                 // https://github.com/gnea/grbl/blob/master/grbl/gcode.c
-                static regex regexAddress(R"(^([FIJKLNPRSTXYZ])\s*([+-]?\d*[.]?\d+))");
+                static regex regexAddress(R"(^([FIJKLNPRSTXYZ])\s*([+-]?\d*([.]?\d+|\.)))");
                 if (regex_search(currentLine, cm, regexAddress)) {
                     chunk.type = Chunk::Address;
                     chunk.length = cm.length();

@@ -13,10 +13,7 @@ void GCodeSyntaxHighlighter::highlightBlock(const QString &text) {
 
     for (auto const &block: parser.blocks()) {
         for (auto const &chunk: block.chunks) {
-            QTextCharFormat *format(nullptr);
-
-            format = formatters[chunk.type];
-
+            auto format = formatters[chunk.type];
             if (format != nullptr) {
                 setFormat(chunk.startPosition, chunk.length, *format);
             }
@@ -61,4 +58,5 @@ GCodeSyntaxHighlighter::GCodeSyntaxHighlighter(QTextDocument *pDocument) :
     formatter->setFontWeight(QFont::ExtraLight);
     formatter->setForeground(Qt::lightGray);
     formatter->setFontItalic(true);
+    formatters[gCode::Chunk::Type::Comment] = formatter;
 }
