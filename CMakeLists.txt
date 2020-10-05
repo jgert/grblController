@@ -25,11 +25,14 @@ set(
         SOURCES_GCODE
         src/gCode/Parser.cpp
         src/gCode/Parser.h
+        src/gCode/split.cpp
+        src/gCode/split.h
 )
 
 set(
         SOURCES_GCODE_TEST
         src/gCode/Parser.test.cpp
+        src/gCode/split.test.cpp
 )
 
 set(
@@ -59,7 +62,9 @@ set(
         src/widgets/codeEditor/GCodeEditorWidget.cpp
         src/widgets/codeEditor/GCodeEditorWidget.h
         src/widgets/render/Renderer2DWidget.cpp
-        src/widgets/render/Renderer2DWidget.h)
+        src/widgets/render/Renderer2DWidget.h
+        src/widgets/codeEditor/GCodeSyntaxHighlighter.cpp
+        src/widgets/codeEditor/GCodeSyntaxHighlighter.h)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
@@ -112,6 +117,7 @@ set(
         src/SerialPort.cpp
         src/SerialPort.h
         ${SOURCES_GRBL}
+        ${SOURCES_GCODE}
         ${SOURCES_WIDGETS}
         src/widgets/settings/SettingsTableModel.cpp
         src/widgets/settings/SettingsTableModel.h
