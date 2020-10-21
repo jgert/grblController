@@ -3,5 +3,7 @@
         <file>csv/alarm_codes_en_US.csv</file>
         <file>csv/error_codes_en_US.csv</file>
         <file>csv/setting_codes_en_US.csv</file>
+        <file>shaders/vshader.glsl</file>
+        <file>shaders/fshader.glsl</file>
     </qresource>
 </RCC>

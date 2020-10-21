@@ -61,8 +61,8 @@ set(
         src/widgets/codeEditor/LineNumberWidget.h
         src/widgets/codeEditor/GCodeEditorWidget.cpp
         src/widgets/codeEditor/GCodeEditorWidget.h
-        src/widgets/render/Renderer2DWidget.cpp
-        src/widgets/render/Renderer2DWidget.h
+        src/widgets/render/Renderer3DWidget.cpp
+        src/widgets/render/Renderer3DWidget.h
         src/widgets/codeEditor/GCodeSyntaxHighlighter.cpp
         src/widgets/codeEditor/GCodeSyntaxHighlighter.h)
 
