@@ -31,16 +31,15 @@ namespace gCode {
         bool hasProgramLineNumber = false;
         LineNumber_t programLineNumber = 0;
         uint8_t command = 0;
-        bool hasSubcommand = false;
-        uint8_t subcommand = false;
+        uint8_t subcommand = 0;
         char address;
         float value = 0;
-        LineNumber_t lineNumber = 0;
         LineNumber_t startPosition = 0;
         LineNumber_t length = 0;
     };
 
     struct Block {
+        LineNumber_t lineNumber = 0;
         vector<Chunk> chunks;
     };
 

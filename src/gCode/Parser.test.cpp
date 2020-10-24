@@ -70,7 +70,7 @@ private slots:
         QCOMPARE(parser.blocks()[0].chunks.size(), 1);
         QCOMPARE(parser.blocks()[0].chunks[0].type, gCode::Chunk::Command);
         QCOMPARE(parser.blocks()[0].chunks[0].hasProgramLineNumber, false);
-        QCOMPARE(parser.blocks()[0].chunks[0].hasSubcommand, false);
+        QCOMPARE(parser.blocks()[0].chunks[0].subcommand, 0);
         QCOMPARE(parser.blocks()[0].chunks[0].startPosition, 0);
     }
 
@@ -98,41 +98,51 @@ private slots:
         gCode::Chunk chunk = parser.blocks()[0].chunks[0];
         QCOMPARE(chunk.type, gCode::Chunk::Command);
         QCOMPARE(chunk.command, 38);
-        QCOMPARE(chunk.hasSubcommand, true);
         QCOMPARE(chunk.subcommand, 3);
     }
 
     void testX() {
         gCode::Parser parser;
-        QCOMPARE(parser.parse("X-1"), true);
-        QCOMPARE(parser.parse("X-2.0"), true);
-        QCOMPARE(parser.parse("X+3.0"), true);
-        QCOMPARE(parser.parse("X +4.0"), true);
-        QCOMPARE(parser.parse("X +5.0"), true);
-        QCOMPARE(parser.parse("X -6.0"), true);
-        QCOMPARE(parser.parse("X -7."), true);
-        QCOMPARE(parser.blocks().size(), 7);
+        QCOMPARE(parser.parse("X-1\nX-2.0\n\nX+3.0\nX +4.0\nX +5.0\nX -6.0\nX -7."), true);
+        QCOMPARE(parser.blocks().size(), 8);
+
+        QCOMPARE(parser.blocks()[0].lineNumber, 0);
         QCOMPARE(parser.blocks()[0].chunks.size(), 1);
         QCOMPARE(parser.blocks()[0].chunks[0].address, 'X');
         QCOMPARE(parser.blocks()[0].chunks[0].value, -1.0);
+
+        QCOMPARE(parser.blocks()[1].lineNumber, 1);
         QCOMPARE(parser.blocks()[1].chunks.size(), 1);
         QCOMPARE(parser.blocks()[1].chunks[0].address, 'X');
         QCOMPARE(parser.blocks()[1].chunks[0].value, -2.0);
-        QCOMPARE(parser.blocks()[2].chunks.size(), 1);
-        QCOMPARE(parser.blocks()[2].chunks[0].address, 'X');
-        QCOMPARE(parser.blocks()[2].chunks[0].value, 3.0);
+
+        QCOMPARE(parser.blocks()[2].lineNumber, 2);
+        QCOMPARE(parser.blocks()[2].chunks.size(), 0);
+
+        QCOMPARE(parser.blocks()[3].lineNumber, 3);
         QCOMPARE(parser.blocks()[3].chunks.size(), 1);
         QCOMPARE(parser.blocks()[3].chunks[0].address, 'X');
-        QCOMPARE(parser.blocks()[3].chunks[0].value, 4.0);
+        QCOMPARE(parser.blocks()[3].chunks[0].value, 3.0);
+
+        QCOMPARE(parser.blocks()[4].lineNumber, 4);
         QCOMPARE(parser.blocks()[4].chunks.size(), 1);
         QCOMPARE(parser.blocks()[4].chunks[0].address, 'X');
-        QCOMPARE(parser.blocks()[4].chunks[0].value, 5.0);
+        QCOMPARE(parser.blocks()[4].chunks[0].value, 4.0);
+
+        QCOMPARE(parser.blocks()[5].lineNumber, 5);
         QCOMPARE(parser.blocks()[5].chunks.size(), 1);
         QCOMPARE(parser.blocks()[5].chunks[0].address, 'X');
-        QCOMPARE(parser.blocks()[5].chunks[0].value, -6.0);
-        QCOMPARE(parser.blocks()[5].chunks.size(), 1);
+        QCOMPARE(parser.blocks()[5].chunks[0].value, 5.0);
+
+        QCOMPARE(parser.blocks()[6].lineNumber, 6);
+        QCOMPARE(parser.blocks()[6].chunks.size(), 1);
         QCOMPARE(parser.blocks()[6].chunks[0].address, 'X');
-        QCOMPARE(parser.blocks()[6].chunks[0].value, -7.0);
+        QCOMPARE(parser.blocks()[6].chunks[0].value, -6.0);
+        QCOMPARE(parser.blocks()[6].chunks.size(), 1);
+
+        QCOMPARE(parser.blocks()[7].lineNumber, 7);
+        QCOMPARE(parser.blocks()[7].chunks[0].address, 'X');
+        QCOMPARE(parser.blocks()[7].chunks[0].value, -7.0);
     }
 
     void testInvalid() {

@@ -13,12 +13,15 @@ namespace gCode {
 
     bool Parser::parse(const std::string &line) {
 
+        parsed_blocks.clear();
+
         auto lines = splitByNewLine(line);
 
         LineNumber_t lineNumber = 0;
 
         for(const auto& item: lines) {
             Block block;
+            block.lineNumber = lineNumber;
 
             auto start = item.begin();
             auto begin = item.begin();
@@ -26,7 +29,6 @@ namespace gCode {
 
             while (begin != end) {
                 Chunk chunk;
-                chunk.lineNumber = lineNumber;
                 chunk.startPosition = distance(start, begin);
 
                 if (*begin == ' ' || *begin == '\t') {
@@ -74,7 +76,6 @@ namespace gCode {
                 if (regex_search(currentLine, cm, regexCommandExtended)) {
                     chunk.type = Chunk::Command;
                     chunk.length = cm.length();
-                    chunk.hasSubcommand = true;
                     chunk.command = stoi(cm[1].str());
                     chunk.subcommand = stoi(cm[2].str());
                     block.chunks.push_back(chunk);
