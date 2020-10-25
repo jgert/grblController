@@ -137,7 +137,7 @@ void Renderer3DWidget::wheelEvent(QWheelEvent *event) {
     QWidget::wheelEvent(event);
 
     auto delta = float(event->angleDelta().y());
-    zoom = fmax(0.1f, zoom - delta * 0.01f);
+    zoom = qMax(0.1f, zoom - delta * 0.01f);
     updateCamera();
 }
 
