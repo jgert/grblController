@@ -17,8 +17,6 @@ struct OperationMove {
     float speed;
 
     OperationMove(QVector3D from, QVector3D to, float speed) : from(from), to(to), speed(speed) {}
-
-    bool operator==(const OperationMove &) const = default;
 };
 
 struct Operation {
@@ -29,8 +27,14 @@ struct Operation {
     OperationMove operationMove;
 
     Operation(OperationMove move) : type(Move), operationMove(move) {}
+};
 
-    bool operator==(const Operation &) const = default;
+inline bool operator==(const OperationMove &lhs, const OperationMove &rhs) {
+    return (lhs.from == rhs.from) && (lhs.to == rhs.to) && (lhs.speed == rhs.speed);
+};
+
+inline bool operator==(const Operation &lhs, const Operation &rhs){
+    return lhs.type == rhs.type && lhs.operationMove == rhs.operationMove;
 };
 
 
