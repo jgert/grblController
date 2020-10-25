@@ -22,6 +22,7 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
+      version: '5.14.2'
       with:
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
         modules: 'qtserialport'

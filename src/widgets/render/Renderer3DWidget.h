@@ -20,7 +20,7 @@ struct Vertex {
     QVector3D pos;
     QVector4D color;
 
-    Vertex(
+    explicit Vertex(
             const QVector3D &pos,
             const QVector4D &color) : pos(pos), color(color) {
     }
@@ -30,7 +30,7 @@ struct Line {
     Vertex start;
     Vertex end;
 
-    Line(const Vertex &start, const Vertex &end) : start(start), end(end) {}
+    explicit Line(const Vertex &start, const Vertex &end) : start(start), end(end) {};
 };
 
 class Renderer3DWidget : public QOpenGLWidget, protected QOpenGLFunctions {
