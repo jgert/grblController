@@ -136,7 +136,7 @@ private slots:
         QCOMPARE(engraver.getState().lastGCodeCommand, 0);
         QCOMPARE(engraver.getState().lastGCodeSubcommand, 0);
         auto operation = operations[0];
-        QCOMPARE(operation, Operation(OperationMove(QVector3D(1, 2, 3), QVector3D(5.08, 2, 3), -1)));
+        QCOMPARE(operation, Operation(OperationMove(QVector3D(1, 2, 3), QVector3D(50.8, 2, 3), -1)));
     }
 
     void testMetricSystemIncremental() {
@@ -178,7 +178,7 @@ private slots:
         QCOMPARE(engraver.getState().lastGCodeCommand, 0);
         QCOMPARE(engraver.getState().lastGCodeSubcommand, 0);
         auto operation = operations[0];
-        QCOMPARE(operation, Operation(OperationMove(QVector3D(1, 2, 3), QVector3D(1, 2, 8.08), -1)));
+        QCOMPARE(operation, Operation(OperationMove(QVector3D(1, 2, 3), QVector3D(1, 2, 53.8), -1)));
     }
 };
 
