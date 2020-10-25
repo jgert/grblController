@@ -2,9 +2,6 @@
 // Created by Jakub Gert on 28/09/2020.
 //
 
-#include <QThreadPool>
-#include <QThread>
-#include <QDebug>
 #include <src/gCode/Parser.h>
 #include <src/machine/Engraver3axis.h>
 #include "GCodeEditorWidget.h"
@@ -42,9 +39,9 @@ void GCodeEditorWidget::parse() {
 
     auto result = parser.parse(program);
 
-//    if (!result) {
-//        return;
-//    }
+    if (!result) {
+        return;
+    }
 
     if (!machine) {
         return;
@@ -52,9 +49,9 @@ void GCodeEditorWidget::parse() {
 
     result = machine->parse(parser.blocks());
 
-//    if (!result) {
-//        return;
-//    }
+    if (!result) {
+        return;
+    }
 
     QVector<Line> lines;
     for (auto const &op: machine->getOperations()) {
