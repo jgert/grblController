@@ -5,8 +5,6 @@
 #ifndef GRBL_GCODEEDITORWIDGET_H
 #define GRBL_GCODEEDITORWIDGET_H
 
-#include <QVector>
-#include <QRunnable>
 #include "CodeEditorWidget.h"
 #include "GCodeSyntaxHighlighter.h"
 #include "../machine/Machine.h"
