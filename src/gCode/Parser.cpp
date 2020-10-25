@@ -17,6 +17,8 @@ namespace gCode {
 
         auto lines = splitByNewLine(line);
 
+        parsed_blocks.reserve(lines.size()*2);
+
         LineNumber_t lineNumber = 0;
 
         for(const auto& item: lines) {

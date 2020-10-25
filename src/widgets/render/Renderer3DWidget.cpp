@@ -24,15 +24,6 @@ void Renderer3DWidget::initializeGL() {
 
     vbo = new QOpenGLBuffer(QOpenGLBuffer::Type::VertexBuffer);
     vbo->create();
-    vbo->bind();
-    vbo->allocate(lines.constData(), lines.count() * sizeof(Line));
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, color));
-
-    vbo->release();
 
     matrixWorld.setToIdentity();
 }
@@ -46,6 +37,14 @@ void Renderer3DWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     vbo->bind();
+
+    vbo->allocate(lines.constData(), lines.count() * sizeof(Line));
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, color));
+
     shader->bind();
 
     shader->setUniformValue(matrixCameraId, matrixCamera);
@@ -64,17 +63,11 @@ Renderer3DWidget::Renderer3DWidget(QWidget *parent) :
         anglePitch(0.0),
         zoom(1.0) {
 
-    for (int x = -5; x <= 5; x++) {
-        Vertex v1(QVector3D(x, -5, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
-        Vertex v2(QVector3D(x, 5, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
-        lines.append(Line(v1, v2));
-    }
-    for (int y = -5; y <= 5; y++) {
-        Vertex v1(QVector3D(-5, y, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
-        Vertex v2(QVector3D(5, y, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
-        lines.append(Line(v1, v2));
-    }
+    createGrid();
+    createCoordinates();
+}
 
+void Renderer3DWidget::createCoordinates() {
     lines.append(
             Line(
                     Vertex(QVector3D(0.0, 0.0, 0.0), QVector4D(1.0, 0.0, 0.0, 1.0)),
@@ -92,6 +85,19 @@ Renderer3DWidget::Renderer3DWidget(QWidget *parent) :
                     Vertex(QVector3D(0.0, 0.0, 0.0), QVector4D(0.0, 0.0, 1.0, 1.0)),
                     Vertex(QVector3D(0.0, 0.0, 1.0), QVector4D(0.0, 0.0, 0.0, 0.0))
             ));
+}
+
+void Renderer3DWidget::createGrid() {
+    for (int x = -5; x <= 5; x++) {
+        Vertex v1(QVector3D(x, -5, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
+        Vertex v2(QVector3D(x, 5, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
+        lines.append(Line(v1, v2));
+    }
+    for (int y = -5; y <= 5; y++) {
+        Vertex v1(QVector3D(-5, y, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
+        Vertex v2(QVector3D(5, y, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
+        lines.append(Line(v1, v2));
+    }
 }
 
 void Renderer3DWidget::mousePressEvent(QMouseEvent *event) {
@@ -158,5 +164,13 @@ void Renderer3DWidget::updateCamera() {
     matrixCamera *= matrixRotation;
     matrixCamera *= matrixTransform;
 
+    update();
+}
+
+void Renderer3DWidget::setLines(const QVector<Line> &lines) {
+    this->lines.clear();
+    createGrid();
+    createCoordinates();
+    this->lines.append(lines);
     update();
 }

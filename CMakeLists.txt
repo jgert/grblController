@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(grbl)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -64,7 +64,8 @@ set(
         src/widgets/render/Renderer3DWidget.cpp
         src/widgets/render/Renderer3DWidget.h
         src/widgets/codeEditor/GCodeSyntaxHighlighter.cpp
-        src/widgets/codeEditor/GCodeSyntaxHighlighter.h)
+        src/widgets/codeEditor/GCodeSyntaxHighlighter.h
+)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
@@ -112,6 +113,25 @@ set(
 )
 
 set(
+        SOURCES_MACHINE
+        src/machine/Engraver3axis.cpp
+        src/machine/Engraver3axis.h
+        src/machine/Machine.h
+        src/machine/Engraver3axis.Machine.cpp
+        src/machine/Engraver3axis.G00.cpp
+        src/machine/Engraver3axis.G01.cpp
+        src/machine/Engraver3axis.G20.cpp
+        src/machine/Engraver3axis.G21.cpp
+        src/machine/Engraver3axis.G90.cpp
+        src/machine/Engraver3axis.G91.cpp
+)
+
+set(
+        SOURCES_MACHINE_TESTS
+        src/machine/Engraver3axis.G00.test.cpp
+        src/machine/Engraver3axis.G01.test.cpp src/machine/Engraver3axis.G20.test.cpp src/machine/Engraver3axis.G21.test.cpp src/machine/Engraver3axis.G90.test.cpp src/machine/Engraver3axis.G91.test.cpp)
+
+set(
         SOURCES
         src/MainWindow.cpp
         src/SerialPort.cpp
@@ -119,6 +139,7 @@ set(
         ${SOURCES_GRBL}
         ${SOURCES_GCODE}
         ${SOURCES_WIDGETS}
+        ${SOURCES_MACHINE}
         src/widgets/settings/SettingsTableModel.cpp
         src/widgets/settings/SettingsTableModel.h
         src/utils/SettingCodes.cpp
@@ -126,7 +147,9 @@ set(
         src/widgets/delegates/LineEditItemDelegate.cpp
         src/widgets/delegates/LineEditItemDelegate.cpp
         src/widgets/delegates/LineEditItemDelegate.h
-        src/utils/ErrorCodes.cpp src/utils/ErrorCodes.h)
+        src/utils/ErrorCodes.cpp
+        src/utils/ErrorCodes.h
+        src/machine/Machine.cpp)
 
 add_executable(grbl
         src/main.cpp
@@ -149,9 +172,12 @@ set(COVERAGE_EXCLUDES **/*.test.*)
 
 add_executable(
         grbl-test
+        ${SOURCES_MACHINE}
         ${SOURCES_GRBL}
         ${SOURCES_GCODE}
         ${SOURCES_GCODE_TEST}
+        ${SOURCES_MACHINE}
+        ${SOURCES_MACHINE_TESTS}
         resources/resources.qrc
         src/grbl/GRBL.test.cpp
         src/grbl/Message.test.cpp

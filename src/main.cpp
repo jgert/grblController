@@ -36,6 +36,11 @@ int main(int argc, char *argv[]) {
     auto layout = new QHBoxLayout;
     auto widget1 = new GCodeEditorWidget();
     auto widget2 = new Renderer3DWidget();
+
+    QWidget::connect(
+            widget1, &GCodeEditorWidget::producedLines,
+            widget2, &Renderer3DWidget::setLines);
+
     layout->addWidget(widget1, 50);
     layout->addWidget(widget2, 50);
     layout->update();

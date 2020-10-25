@@ -57,6 +57,9 @@ private:
 
     void updateCamera();
 
+    void createGrid();
+    void createCoordinates();
+
 protected:
     void initializeGL() override;
 
@@ -72,6 +75,9 @@ protected:
 
 public:
     explicit Renderer3DWidget(QWidget *parent = nullptr);
+
+public slots:
+    void setLines(const QVector<Line>& lines);
 };
 
 
