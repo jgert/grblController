@@ -202,8 +202,8 @@ add_executable(
 
 file(COPY fixtures/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/fixtures/)
 
-#include(cmake-modules/CodeCoverage.cmake)
-#append_coverage_compiler_flags()
+include(cmake-modules/CodeCoverage.cmake)
+append_coverage_compiler_flags()
 
 target_link_libraries(
         grbl-test
