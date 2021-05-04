@@ -17,10 +17,16 @@ struct State {
         Imperial,
         Metric,
     } Units;
+    typedef enum {
+        XY,
+        ZX,
+        YZ
+    }PlaneSelection;
     Units units;
     QVector3D currentPosition;
     QVector3D startingPosition;
     CoordinateMode coordinateMode;
+    PlaneSelection planeSelection;
     float feedRate;
     unsigned int programLineNumber;
     unsigned int sourceLineNumber;
@@ -33,6 +39,7 @@ struct State {
             currentPosition(QVector3D(0, 0, 0)),
             startingPosition(QVector3D(0, 0, 0)),
             coordinateMode(CoordinateMode::Absolute),
+            planeSelection(PlaneSelection::XY),
             feedRate(-1),
             programLineNumber(0),
             sourceLineNumber(0),
@@ -41,36 +48,9 @@ struct State {
     }
 };
 
-typedef struct Error {
-    typedef enum {
-        NotSupported,
-        InvalidCommandChunkType,
-        InvalidCommandNumber,
-        UnexpectedChunkType,
-        InvalidAddress,
-        MissingArguments,
-        InvalidArgumentsCount,
-    } Error_t;
-
-    uint32_t lineNumber;
-    Error_t type;
-
-    Error(uint32_t lineNumber, Error_t type) : lineNumber(lineNumber), type(type) {
-
-    }
-
-} Error_t;
-
-inline bool operator==(const Error &lhs, const Error &rhs) {
-
-    return lhs.lineNumber == rhs.lineNumber &&
-           lhs.type == rhs.type;
-}
-
 class Engraver3axis : public Machine {
 private:
     State state;
-    vector<Error> errors;
 
     float convertToMetricsIfNeeded(float value) const;
     unsigned int modalGroup(unsigned int command);
@@ -81,8 +61,6 @@ public:
 
     void reset() override;
 
-    const vector<Error> &getErrors() const;
-
     const State &getState() const;
 
     bool parse(const vector<gCode::Block> &blocks) override;
@@ -92,6 +70,12 @@ public:
     bool parseG00(const gCode::Block &block);
 
     bool parseG01(const gCode::Block &block);
+
+    bool parseG17(const gCode::Block &block);
+
+    bool parseG18(const gCode::Block &block);
+
+    bool parseG19(const gCode::Block &block);
 
     bool parseG20(const gCode::Block &block);
 

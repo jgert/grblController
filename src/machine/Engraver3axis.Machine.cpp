@@ -8,6 +8,7 @@ using namespace gCode;
 void Engraver3axis::reset() {
     Machine::reset();
     state = State();
+    errors.clear();
 }
 
 bool Engraver3axis::parse(const vector<gCode::Block> &blocks) {
@@ -18,9 +19,13 @@ bool Engraver3axis::parse(const vector<gCode::Block> &blocks) {
     for (const auto &block: blocks) {
 
         result &= parseBlock(block);
-//        if(!result) {
-//            return false;
-//        }
+
+        if (!result) {
+            errors.emplace_back(block.lineNumber, Error::NotSupported);
+        }
+        if (!result) {
+            return false;
+        }
     }
 
     return result;
@@ -38,7 +43,6 @@ bool Engraver3axis::parseBlock(const gCode::Block &block) {
 
     switch (chunk.type) {
         case Chunk::Type::Error:
-            errors.emplace_back(block.lineNumber, Error::NotSupported);
             return false;
         case Chunk::Type::Percent:
             return true;
@@ -59,6 +63,12 @@ bool Engraver3axis::parseBlock(const gCode::Block &block) {
                     return parseG00(block);
                 case 1:
                     return parseG01(block);
+                case 17:
+                    return parseG17(block);
+                case 18:
+                    return parseG18(block);
+                case 19:
+                    return parseG19(block);
                 case 20:
                     return parseG20(block);
                 case 21:
