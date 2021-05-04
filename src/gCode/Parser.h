@@ -48,7 +48,7 @@ namespace gCode {
     public:
         bool parse(const string &line);
 
-        const vector<Block>& blocks() const;
+        [[nodiscard]] const vector<Block>& blocks() const;
     };
 }
 #endif //GRBL_PARSER_H
