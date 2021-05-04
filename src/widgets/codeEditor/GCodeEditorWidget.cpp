@@ -40,6 +40,7 @@ void GCodeEditorWidget::parse() {
     auto result = parser.parse(program);
 
     if (!result) {
+        qDebug() << "Error parsing program";
         return;
     }
 
@@ -50,6 +51,10 @@ void GCodeEditorWidget::parse() {
     result = machine->parse(parser.blocks());
 
     if (!result) {
+        qDebug() << "Error machine parse program";
+        for(const auto &item: machine->getErrors()) {
+            qDebug() << item.description().c_str();
+        }
         return;
     }
 
