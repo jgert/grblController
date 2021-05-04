@@ -117,6 +117,7 @@ set(
         src/machine/Engraver3axis.cpp
         src/machine/Engraver3axis.h
         src/machine/Machine.h
+        src/machine/Machine.cpp
         src/machine/Engraver3axis.Machine.cpp
         src/machine/Engraver3axis.G00.cpp
         src/machine/Engraver3axis.G01.cpp
@@ -124,12 +125,12 @@ set(
         src/machine/Engraver3axis.G21.cpp
         src/machine/Engraver3axis.G90.cpp
         src/machine/Engraver3axis.G91.cpp
-)
+        src/machine/Engraver3axis.G18.cpp)
 
 set(
         SOURCES_MACHINE_TESTS
         src/machine/Engraver3axis.G00.test.cpp
-        src/machine/Engraver3axis.G01.test.cpp src/machine/Engraver3axis.G20.test.cpp src/machine/Engraver3axis.G21.test.cpp src/machine/Engraver3axis.G90.test.cpp src/machine/Engraver3axis.G91.test.cpp)
+        src/machine/Engraver3axis.G01.test.cpp src/machine/Engraver3axis.G20.test.cpp src/machine/Engraver3axis.G21.test.cpp src/machine/Engraver3axis.G90.test.cpp src/machine/Engraver3axis.G91.test.cpp src/machine/Engraver3axis.G17.cpp src/machine/Engraver3axis.G17.test.cpp src/machine/Engraver3axis.G18.test.cpp src/machine/Engraver3axis.G19.test.cpp src/machine/Engraver3axis.G19.cpp)
 
 set(
         SOURCES
@@ -202,8 +203,8 @@ add_executable(
 
 file(COPY fixtures/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/fixtures/)
 
-include(cmake-modules/CodeCoverage.cmake)
-append_coverage_compiler_flags()
+#include(cmake-modules/CodeCoverage.cmake)
+#append_coverage_compiler_flags()
 
 target_link_libraries(
         grbl-test
