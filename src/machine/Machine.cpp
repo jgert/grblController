@@ -104,3 +104,7 @@ Machine::ModalGroup Machine::modalGroup(
 }
 
 #undef G
+
+const vector<Error> &Machine::getErrors() const {
+    return errors;
+}
