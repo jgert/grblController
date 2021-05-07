@@ -16,7 +16,7 @@ Q_OBJECT
 private:
     gCode::Parser parser;
     GCodeSyntaxHighlighter *highlighter;
-    Machine *machine;
+    machine::Machine *machine;
 
     void onTextChanged();
 
@@ -27,7 +27,7 @@ public:
 
     virtual ~GCodeEditorWidget();
 
-    void setMachine(Machine *machine);
+    void setMachine(machine::Machine *machine);
 
 
 signals:

@@ -10,7 +10,7 @@
 GCodeEditorWidget::GCodeEditorWidget(QWidget *parent) :
         CodeEditorWidget(parent),
         highlighter(new GCodeSyntaxHighlighter(this->document())),
-        machine(new Engraver3axis()) {
+        machine(new machine::Engraver3axis()) {
 
     connect(this, &QPlainTextEdit::textChanged,
             this, &GCodeEditorWidget::onTextChanged);
@@ -25,7 +25,7 @@ void GCodeEditorWidget::onTextChanged() {
     parse();
 }
 
-void GCodeEditorWidget::setMachine(Machine *m) {
+void GCodeEditorWidget::setMachine(machine::Machine *m) {
     this->machine = m;
     if (machine) {
         machine->reset();
@@ -52,20 +52,23 @@ void GCodeEditorWidget::parse() {
 
     if (!result) {
         qDebug() << "Error machine parse program";
-        for(const auto &item: machine->getErrors()) {
-            qDebug() << item.description().c_str();
-        }
+//        for(const auto &item: machine->getErrors()) {
+//            qDebug() << item.description().c_str();
+//        }
         return;
     }
 
     QVector<Line> lines;
-    for (auto const &op: machine->getOperations()) {
-        switch (op.type) {
-            case Operation::Move:
+    for(auto const &state : machine->getStates()) {
+        const auto &operation = state.operation;
+        switch (operation.type) {
+            case machine::Operation::NoOperation:
+                continue;
+            case machine::Operation::Move:
                 lines.append(
                         Line(
-                                Vertex(op.operationMove.from, QVector4D(0, 0, 0, 1)),
-                                Vertex(op.operationMove.to, QVector4D(0, 0, 0, 1))));
+                                Vertex(operation.operationMove.from, QVector4D(0, 0, 0, 1)),
+                                Vertex(operation.operationMove.to, QVector4D(0, 0, 0, 1))));
                 break;
         }
     }
