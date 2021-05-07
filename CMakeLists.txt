@@ -114,23 +114,42 @@ set(
 
 set(
         SOURCES_MACHINE
-        src/machine/Engraver3axis.cpp
-        src/machine/Engraver3axis.h
+        ${SOURCES_GCODE}
+        src/machine/Error.h
+        src/machine/Operation.h
+        src/machine/Operation.cpp
+        src/machine/MachineState.h
+        src/machine/Parser.h
+        src/machine/Parser.cpp
+        src/machine/G00.cpp
+        src/machine/G01.cpp
+        src/machine/G17.cpp
+        src/machine/G18.cpp
+        src/machine/G19.cpp
+        src/machine/G20.cpp
+        src/machine/G21.cpp
+        src/machine/G90.cpp
+        src/machine/G91.cpp
+
         src/machine/Machine.h
         src/machine/Machine.cpp
+        src/machine/Engraver3axis.h
+        src/machine/Engraver3axis.cpp
         src/machine/Engraver3axis.Machine.cpp
-        src/machine/Engraver3axis.G00.cpp
-        src/machine/Engraver3axis.G01.cpp
-        src/machine/Engraver3axis.G20.cpp
-        src/machine/Engraver3axis.G21.cpp
-        src/machine/Engraver3axis.G90.cpp
-        src/machine/Engraver3axis.G91.cpp
-        src/machine/Engraver3axis.G18.cpp)
+)
 
 set(
         SOURCES_MACHINE_TESTS
-        src/machine/Engraver3axis.G00.test.cpp
-        src/machine/Engraver3axis.G01.test.cpp src/machine/Engraver3axis.G20.test.cpp src/machine/Engraver3axis.G21.test.cpp src/machine/Engraver3axis.G90.test.cpp src/machine/Engraver3axis.G91.test.cpp src/machine/Engraver3axis.G17.cpp src/machine/Engraver3axis.G17.test.cpp src/machine/Engraver3axis.G18.test.cpp src/machine/Engraver3axis.G19.test.cpp src/machine/Engraver3axis.G19.cpp)
+        src/machine/G00.test.cpp
+        src/machine/G01.test.cpp
+        src/machine/G17.test.cpp
+        src/machine/G18.test.cpp
+        src/machine/G19.test.cpp
+        src/machine/G20.test.cpp
+        src/machine/G21.test.cpp
+        src/machine/G90.test.cpp
+        src/machine/G91.test.cpp
+)
 
 set(
         SOURCES
@@ -173,7 +192,6 @@ set(COVERAGE_EXCLUDES **/*.test.*)
 
 add_executable(
         grbl-test
-        ${SOURCES_MACHINE}
         ${SOURCES_GRBL}
         ${SOURCES_GCODE}
         ${SOURCES_GCODE_TEST}
