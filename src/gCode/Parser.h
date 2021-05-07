@@ -2,13 +2,11 @@
 // Created by Jakub Gert on 28/09/2020.
 //
 
-#ifndef GRBL_PARSER_H
-#define GRBL_PARSER_H
+#ifndef GRBL_GCODEPARSER_H
+#define GRBL_GCODEPARSER_H
 
 #include <iostream>
 #include <vector>
-
-using namespace std;
 
 namespace gCode {
 
@@ -27,7 +25,7 @@ namespace gCode {
         } Type;
 
         Chunk::Type type;
-        string comment;
+        std::string comment;
         bool hasProgramLineNumber = false;
         LineNumber_t programLineNumber = 0;
         uint8_t command = 0;
@@ -40,15 +38,15 @@ namespace gCode {
 
     struct Block {
         LineNumber_t lineNumber = 0;
-        vector<Chunk> chunks;
+        std::vector<Chunk> chunks;
     };
 
     class Parser {
-        vector<Block> parsed_blocks;
+        std::vector<Block> parsed_blocks;
     public:
-        bool parse(const string &line);
+        bool parse(const std::string &line);
 
-        [[nodiscard]] const vector<Block>& blocks() const;
+        [[nodiscard]] const std::vector<Block>& blocks() const;
     };
 }
-#endif //GRBL_PARSER_H
+#endif //GRBL_GCODEPARSER_H
