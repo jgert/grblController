@@ -7,6 +7,7 @@
 #include "Parser.h"
 
 using namespace gCode;
+using namespace machine;
 
 class G18Tests : public TestSuite {
 Q_OBJECT

@@ -6,6 +6,8 @@
 #include "tests/TestSuite.h"
 #include "Parser.h"
 
+using namespace machine;
+
 class G17Tests : public TestSuite {
 Q_OBJECT
 private slots:

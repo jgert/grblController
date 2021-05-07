@@ -15,11 +15,10 @@ namespace machine {
         float speed;
 
         OperationMove(QVector3D from, QVector3D to, float speed);
-    };
 
-    inline bool operator==(const OperationMove &lhs, const OperationMove &rhs) {
-        return !(lhs.from != rhs.from || lhs.to != rhs.to || lhs.speed != rhs.speed);
-    }
+        inline bool operator==(const OperationMove &operation) const = default;
+        inline bool operator!=(const OperationMove &operation) const = default;
+    };
 
     struct Operation {
         enum Type {
@@ -34,11 +33,10 @@ namespace machine {
         Operation(const Operation &operation) = default;
 
         explicit Operation(OperationMove move);
-    };
 
-    inline bool operator==(const Operation &lhs, const Operation &rhs) {
-        return !(lhs.type != rhs.type || lhs.operationMove != rhs.operationMove);
-    }
+        inline bool operator==(const Operation &operation) const = default;
+        inline bool operator!=(const Operation &operation) const = default;
+    };
 
 }
 
