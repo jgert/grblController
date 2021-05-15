@@ -123,6 +123,7 @@ set(
         src/machine/Parser.cpp
         src/machine/G00.cpp
         src/machine/G01.cpp
+        src/machine/G02_G03.cpp
         src/machine/G17.cpp
         src/machine/G18.cpp
         src/machine/G19.cpp
@@ -136,7 +137,7 @@ set(
         src/machine/Engraver3axis.h
         src/machine/Engraver3axis.cpp
         src/machine/Engraver3axis.Machine.cpp
-)
+        )
 
 set(
         SOURCES_MACHINE_TESTS
