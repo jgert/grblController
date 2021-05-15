@@ -99,7 +99,7 @@ QVector<Line> GCodeEditorWidget::expandArc(const machine::MachineState &state) {
     auto startAngle = atan2(r1.y(), r1.x());
     auto angle = atan2(r1.x() * r2.y() - r2.x() * r1.y(), r1.x() * r2.x() + r1.y() * r2.y());
 
-    static const auto PI = std::atanf(1.0)*4;
+    static const auto PI = atanf(1.0)*4;
 
     if (operation.clockwise) {
         if (angle > 0) {
