@@ -112,7 +112,7 @@ namespace machine {
         float x = endPoint[axis_0] - currentState.currentPosition[axis_0];
         float y = endPoint[axis_1] - currentState.currentPosition[axis_1];
 
-        if (!isnan(radius)) {
+        if (!std::isnan(radius)) {
 
             auto delta = startPoint - endPoint;
             if (delta.lengthSquared() == 0) {
