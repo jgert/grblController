@@ -26,15 +26,18 @@ namespace machine {
             nextState.operation = Operation();
 
             result &= parseBlock(block, currentState, nextState);
+            states.emplace_back(nextState);
 
             if (!result) {
                 return false;
             }
-
-            states.emplace_back(nextState);
         }
 
         return result;
+    }
+
+    const Error &Engraver3axis::error() const {
+        return states.back().error;
     }
 
 }

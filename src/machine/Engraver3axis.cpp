@@ -45,6 +45,9 @@ namespace machine {
                         return G00(block, currentState, nextState);
                     case 1:
                         return G01(block, currentState, nextState);
+                    case 2:
+                    case 3:
+                        return G02_G03(block, currentState, nextState);
                     case 17:
                         return G17(block, nextState);
                     case 18:

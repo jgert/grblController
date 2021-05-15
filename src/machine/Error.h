@@ -7,7 +7,7 @@
 
 namespace machine {
 
-    typedef struct Error {
+     struct Error {
         typedef enum {
             NoError,
             NotSupported,
@@ -17,6 +17,9 @@ namespace machine {
             InvalidAddress,
             MissingArguments,
             InvalidArgumentsCount,
+            InvalidTarget,
+            ArcRadius,
+            NoOffsetsInPlane
         } Error_t;
 
         uint32_t lineNumber;
@@ -52,10 +55,16 @@ namespace machine {
                     return "missing arguments";
                 case InvalidArgumentsCount:
                     return "invalid arguments count";
+                case InvalidTarget:
+                    return "invalid target";
+                case ArcRadius:
+                    return "arc radius";
+                case NoOffsetsInPlane:
+                    return "no offsets in plane";
             }
         }
 
-    } Error_t;
+    };
 
     inline bool operator==(const Error &lhs, const Error &rhs) {
 

@@ -48,6 +48,8 @@ namespace machine {
         virtual bool parse(const vector<gCode::Block> &blocks) = 0;
 
         [[nodiscard]] const vector<MachineState> &getStates() const;
+
+        [[nodiscard]] virtual const Error &error() const = 0;
     };
 
 }

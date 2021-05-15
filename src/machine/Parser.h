@@ -16,6 +16,8 @@ namespace machine {
 
     bool G01(const gCode::Block &block, const MachineState &currentState, MachineState &nextState);
 
+    bool G02_G03(const gCode::Block &block, const MachineState &currentState, MachineState &nextState);
+
     bool G17(const gCode::Block &block, MachineState &nextState);
 
     bool G18(const gCode::Block &block, MachineState &nextState);

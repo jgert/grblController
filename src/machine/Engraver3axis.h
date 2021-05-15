@@ -23,6 +23,7 @@ namespace machine {
 
         bool parse(const vector<gCode::Block> &blocks) override;
 
+        [[nodiscard]] const Error& error() const override;
     };
 
 }

@@ -30,7 +30,6 @@ namespace machine {
 
         Units units = Metric;
         QVector3D currentPosition;
-        QVector3D startingPosition;
         CoordinateMode coordinateMode = Absolute;
         PlaneSelection planeSelection = XY;
         float feedRate = -1;
