@@ -7,6 +7,7 @@
 #include "Parser.h"
 
 using namespace gCode;
+using namespace std;
 
 namespace machine {
 
@@ -112,7 +113,7 @@ namespace machine {
         float x = endPoint[axis_0] - currentState.currentPosition[axis_0];
         float y = endPoint[axis_1] - currentState.currentPosition[axis_1];
 
-        if (!std::isnan(radius)) {
+        if (!isnan(radius)) {
 
             auto delta = startPoint - endPoint;
             if (delta.lengthSquared() == 0) {
