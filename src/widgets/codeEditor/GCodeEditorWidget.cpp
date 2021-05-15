@@ -75,7 +75,7 @@ void GCodeEditorWidget::parse() {
                                 Vertex(operation.operationMove.to, QVector4D(0, 0, 0, 1))));
                 break;
             case machine::Operation::Arc:
-                lines.append(this->expandArc(state));
+                lines.append(GCodeEditorWidget::expandArc(state));
                 break;
         }
     }
