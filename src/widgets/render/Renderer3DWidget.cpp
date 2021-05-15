@@ -25,6 +25,9 @@ void Renderer3DWidget::initializeGL() {
     vbo = new QOpenGLBuffer(QOpenGLBuffer::Type::VertexBuffer);
     vbo->create();
 
+    vboPoints = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
+    vboPoints->create();
+
     matrixWorld.setToIdentity();
 }
 
@@ -36,6 +39,12 @@ void Renderer3DWidget::paintGL() {
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    shader->bind();
+
+    shader->setUniformValue(matrixCameraId, matrixCamera);
+    shader->setUniformValue(matrixProjectionId, matrixProjection);
+    shader->setUniformValue(matrixWorldId, matrixWorld);
+
     vbo->bind();
 
     vbo->allocate(lines.constData(), lines.count() * sizeof(Line));
@@ -45,15 +54,21 @@ void Renderer3DWidget::paintGL() {
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, color));
 
-    shader->bind();
-
-    shader->setUniformValue(matrixCameraId, matrixCamera);
-    shader->setUniformValue(matrixProjectionId, matrixProjection);
-    shader->setUniformValue(matrixWorldId, matrixWorld);
-
     glDrawArrays(GL_LINES, 0, lines.count() * 2);
-    shader->release();
     vbo->release();
+
+    glEnable(GL_PROGRAM_POINT_SIZE);
+
+    vboPoints->bind();
+    vboPoints->allocate(points.constData(), points.count() * sizeof(Vertex));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *) offsetof(Vertex, color));
+    glDrawArrays(GL_POINTS, 0, points.count());
+    vboPoints->release();
+
+     shader->release();
 }
 
 Renderer3DWidget::Renderer3DWidget(QWidget *parent) :
@@ -88,6 +103,7 @@ void Renderer3DWidget::createCoordinates() {
 }
 
 void Renderer3DWidget::createGrid() {
+    return;
     for (int x = -5; x <= 5; x++) {
         Vertex v1(QVector3D(x, -5, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
         Vertex v2(QVector3D(x, 5, 0), QVector4D(0.5, 0.5, 0.5, 0.5));
@@ -167,10 +183,12 @@ void Renderer3DWidget::updateCamera() {
     update();
 }
 
-void Renderer3DWidget::setLines(const QVector<Line> &lines) {
+void Renderer3DWidget::setLines(const QVector<Line> &lines, const QVector<Vertex> &points) {
     this->lines.clear();
+    this->points.clear();
     createGrid();
     createCoordinates();
     this->lines.append(lines);
+    this->points.append(points);
     update();
 }

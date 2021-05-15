@@ -44,10 +44,11 @@ private:
     int matrixCameraId;
     int matrixWorldId;
     QVector<Line> lines;
-    QVector<QVector3D> points;
+    QVector<Vertex> points;
 
     QOpenGLVertexArrayObject *vao;
     QOpenGLBuffer *vbo;
+    QOpenGLBuffer *vboPoints;
     QOpenGLShaderProgram *shader;
     QOpenGLBuffer *vboGrid;
     QVector3D cameraLookAtPosition;
@@ -77,7 +78,7 @@ public:
     explicit Renderer3DWidget(QWidget *parent = nullptr);
 
 public slots:
-    void setLines(const QVector<Line>& lines);
+    void setLines(const QVector<Line>& lines, const QVector<Vertex> &points);
 };
 
 
