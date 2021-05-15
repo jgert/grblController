@@ -10,6 +10,7 @@
 #include "../machine/Machine.h"
 
 struct Line;
+struct Vertex;
 
 class GCodeEditorWidget : public CodeEditorWidget {
 Q_OBJECT
@@ -22,6 +23,8 @@ private:
 
     void parse();
 
+    static QVector<Line> expandArc(const machine::MachineState& state) ;
+
 public:
     explicit GCodeEditorWidget(QWidget *parent = nullptr);
 
@@ -32,7 +35,7 @@ public:
 
 signals:
 
-    void producedLines(const QVector<Line> &lines) const;
+    void producedLines(const QVector<Line> &lines, const QVector<Vertex> &points) const;
 };
 
 
