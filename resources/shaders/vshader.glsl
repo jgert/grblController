@@ -10,6 +10,7 @@ uniform mat4 mWorld;
 
 void main(void)
 {
+    gl_PointSize = 12;
     gl_Position = mProjection * mCamera * mWorld * vertex;
     color = vColor;
 }
