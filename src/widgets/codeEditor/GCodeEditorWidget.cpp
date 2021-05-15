@@ -95,8 +95,8 @@ QVector<Line> GCodeEditorWidget::expandArc(const machine::MachineState &state) {
     QVector2D r1 = from - center;
     QVector2D r2 = to - center;
 
-    auto startAngle = atan2(r1.y(), r1.x());
-    auto angle = atan2f(r1.x() * r2.y() - r2.x() * r1.y(), r1.x() * r2.x() + r1.y() * r2.y());
+    auto startAngle = std::atan2(r1.y(), r1.x());
+    auto angle = std::atan2(r1.x() * r2.y() - r2.x() * r1.y(), r1.x() * r2.x() + r1.y() * r2.y());
 
     static const auto PI = std::atanf(1.0)*4;
 
@@ -125,10 +125,10 @@ QVector<Line> GCodeEditorWidget::expandArc(const machine::MachineState &state) {
     auto lines = QVector<Line>();
 
     for (int i = 1; i <= segments; i++) {
-        auto x1 = operation.radius * std::cosf((float) (i - 1) * theta_per_segment + startAngle);
-        auto y1 = operation.radius * std::sinf((float) (i - 1) * theta_per_segment + startAngle);
-        auto x2 = operation.radius * std::cosf((float) (i) * theta_per_segment + startAngle);
-        auto y2 = operation.radius * std::sinf((float) (i) * theta_per_segment + startAngle);
+        auto x1 = operation.radius * std::cos((float) (i - 1) * theta_per_segment + startAngle);
+        auto y1 = operation.radius * std::sin((float) (i - 1) * theta_per_segment + startAngle);
+        auto x2 = operation.radius * std::cos((float) (i) * theta_per_segment + startAngle);
+        auto y2 = operation.radius * std::sin((float) (i) * theta_per_segment + startAngle);
         auto z1 = operation.from[operation.axis_linear] + linear_per_segment * (float) (i - 1);
         auto z2 = operation.from[operation.axis_linear] + linear_per_segment * (float) i;
         auto p1 = QVector3D();
