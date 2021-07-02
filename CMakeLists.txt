@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(grbl)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -22,6 +22,20 @@ include_directories(cmake-build-debug/Viewer_autogen/include)
 include_directories(src/widgets)
 
 set(
+        SOURCES_GCODE
+        src/gCode/Parser.cpp
+        src/gCode/Parser.h
+        src/gCode/split.cpp
+        src/gCode/split.h
+)
+
+set(
+        SOURCES_GCODE_TEST
+        src/gCode/Parser.test.cpp
+        src/gCode/split.test.cpp
+)
+
+set(
         SOURCES_WIDGETS
         src/widgets/console/ConsoleWidget.cpp
         src/widgets/console/ConsoleWidget.h
@@ -36,7 +50,22 @@ set(
         src/widgets/settings/SettingsWidget.cpp
         src/widgets/settings/SettingsWidget.h
         src/utils/AlarmCodes.cpp
-        src/utils/AlarmCodes.h src/widgets/alarm/AlarmWidget.cpp src/widgets/alarm/AlarmWidget.h)
+        src/utils/AlarmCodes.h
+        src/widgets/alarm/AlarmWidget.cpp
+        src/widgets/alarm/AlarmWidget.h
+        src/utils/AlarmCodes.h
+        src/widgets/alarm/AlarmWidget.cpp
+        src/widgets/alarm/AlarmWidget.h
+        src/widgets/codeEditor/CodeEditorWidget.cpp
+        src/widgets/codeEditor/CodeEditorWidget.h
+        src/widgets/codeEditor/LineNumberWidget.h
+        src/widgets/codeEditor/GCodeEditorWidget.cpp
+        src/widgets/codeEditor/GCodeEditorWidget.h
+        src/widgets/render/Renderer3DWidget.cpp
+        src/widgets/render/Renderer3DWidget.h
+        src/widgets/codeEditor/GCodeSyntaxHighlighter.cpp
+        src/widgets/codeEditor/GCodeSyntaxHighlighter.h
+)
 
 set(
         SOURCES_PARSER_STATUS_REPORT
@@ -76,11 +105,51 @@ set(
         src/grbl/vec3/vec3.h
         src/utils/SettingCodes.cpp
         src/utils/SettingCodes.h
-    )
+)
 
 set(
         SOURCES_GRBL
         ${SOURCES_PARSER_STATUS_REPORT}
+)
+
+set(
+        SOURCES_MACHINE
+        ${SOURCES_GCODE}
+        src/machine/Error.h
+        src/machine/Operation.h
+        src/machine/Operation.cpp
+        src/machine/MachineState.h
+        src/machine/Parser.h
+        src/machine/Parser.cpp
+        src/machine/G00.cpp
+        src/machine/G01.cpp
+        src/machine/G02_G03.cpp
+        src/machine/G17.cpp
+        src/machine/G18.cpp
+        src/machine/G19.cpp
+        src/machine/G20.cpp
+        src/machine/G21.cpp
+        src/machine/G90.cpp
+        src/machine/G91.cpp
+
+        src/machine/Machine.h
+        src/machine/Machine.cpp
+        src/machine/Engraver3axis.h
+        src/machine/Engraver3axis.cpp
+        src/machine/Engraver3axis.Machine.cpp
+        )
+
+set(
+        SOURCES_MACHINE_TESTS
+        src/machine/G00.test.cpp
+        src/machine/G01.test.cpp
+        src/machine/G17.test.cpp
+        src/machine/G18.test.cpp
+        src/machine/G19.test.cpp
+        src/machine/G20.test.cpp
+        src/machine/G21.test.cpp
+        src/machine/G90.test.cpp
+        src/machine/G91.test.cpp
 )
 
 set(
@@ -89,7 +158,9 @@ set(
         src/SerialPort.cpp
         src/SerialPort.h
         ${SOURCES_GRBL}
+        ${SOURCES_GCODE}
         ${SOURCES_WIDGETS}
+        ${SOURCES_MACHINE}
         src/widgets/settings/SettingsTableModel.cpp
         src/widgets/settings/SettingsTableModel.h
         src/utils/SettingCodes.cpp
@@ -97,7 +168,9 @@ set(
         src/widgets/delegates/LineEditItemDelegate.cpp
         src/widgets/delegates/LineEditItemDelegate.cpp
         src/widgets/delegates/LineEditItemDelegate.h
-        src/utils/ErrorCodes.cpp src/utils/ErrorCodes.h)
+        src/utils/ErrorCodes.cpp
+        src/utils/ErrorCodes.h
+        src/machine/Machine.cpp)
 
 add_executable(grbl
         src/main.cpp
@@ -116,15 +189,15 @@ target_link_libraries(grbl
         Qt5::Widgets
         Qt5::SerialPort)
 
-include(cmake-modules/CodeCoverage.cmake)
-
-append_coverage_compiler_flags()
-
 set(COVERAGE_EXCLUDES **/*.test.*)
 
 add_executable(
         grbl-test
         ${SOURCES_GRBL}
+        ${SOURCES_GCODE}
+        ${SOURCES_GCODE_TEST}
+        ${SOURCES_MACHINE}
+        ${SOURCES_MACHINE_TESTS}
         resources/resources.qrc
         src/grbl/GRBL.test.cpp
         src/grbl/Message.test.cpp
@@ -144,7 +217,13 @@ add_executable(
         src/utils/SettingCodes.test.cpp
         tests/TestSuite.cpp
         tests/TestSuite.h
-        tests/main.cpp)
+        tests/main.cpp
+)
+
+file(COPY fixtures/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/fixtures/)
+
+#include(cmake-modules/CodeCoverage.cmake)
+#append_coverage_compiler_flags()
 
 target_link_libraries(
         grbl-test

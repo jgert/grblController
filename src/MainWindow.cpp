@@ -45,6 +45,8 @@ MainWindow::MainWindow(SerialPort *serialPort) :
     connect(
             serialPort, &SerialPort::receivedData,
             grbl, &GRBL::parse);
+
+
 }
 
 void MainWindow::createMainMenu() {
